@@ -7,7 +7,14 @@
 import mapData from '@/assets/data/mapData'
 import echarts from "echarts"
 import resize from '@/mixin/chartsResize'
-import 'echarts/map/js/china' // 引入中国地图数据
+//import 'echarts/map/js/china' // 引入中国地图数据
+
+import rizhaoJson1 from '@/assets/data/rizhaoMap.json'
+//东港区数据
+import rizhaoJson from '@/assets/data/rizhaoDg.json'
+
+echarts.registerMap('rizhao', rizhaoJson)
+
 export default {
     name: "mapCharts",
     props: {
@@ -37,14 +44,27 @@ export default {
             myChart.setOption({ // 进行相关配置
                 backgroundColor: "transparent",
                 tooltip: {}, // 鼠标移到图里面的浮动提示框
-
                 geo: { // 这个是重点配置区
-                    map: 'china', // 表示中国地图
-                    roam: true//可以缩放地图
+                    map: 'rizhao', //日照地图
+                    roam: true,//可以缩放地图
+                    zoom: 1.1,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#3a387b',
+                            borderWidth: 2,
+                            borderColor: '#dde2f4',
+                            shadowOffsetX: 4,
+                            shadowColor: '#0c98fa',
+                            shadowBlur: 1
+                        },
+                        emphasis: {
+                            areaColor: '#2464ae'
+                        }
+                    }
                 },
                 //左侧小导航图标
                 visualMap: {
-                    show: true,
+                    show: false,
                     left: '3%',
                     bottom: '5%',
                     splitList: [
@@ -59,7 +79,7 @@ export default {
                 },
                 series: [
                     {
-                        name: '中国地图', // 浮动框的标题
+                        name: 'rizhao', // 浮动框的标题
                         type: 'map',
                         geoIndex: 0,
                         data: mapData

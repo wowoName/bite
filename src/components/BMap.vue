@@ -1,21 +1,13 @@
 <template>
-    <div class="title">
-        <div class="square"></div>
-        <span>{{title}}</span>
+    <div class=''>
+        一些内容
     </div>
 </template>
 
 <script>
 
 export default {
-    name: 'WisdomTitle',
     components: {},
-    props: {
-        title: {
-            type: String,
-            defalut: ""
-        }
-    },
     data() {
         return {
 
@@ -42,22 +34,4 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.title {
-    width: 100%;
-    height: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 4px 0;
-    .square {
-        width: 2.5px;
-        height: 2.5px;
-        margin-right: 2px;
-        background-color: #4c86e6;
-    }
-    span {
-        font-size: 5px;
-        color: #548cc2;
-    }
-}
 </style>
