@@ -228,8 +228,8 @@ export default {
             this.vehicleDataObj.redData = this.getRandomNum(26);
         },
         getOrderDataObj() {
-            this.orderDataObj.lineData = this.getRandomNum(32);
-            this.orderDataObj.barData = this.getRandomNum(32);
+            this.orderDataObj.lineData = this.getRandomNum(31);
+            this.orderDataObj.barData = this.getRandomNum(31);
         },
     }
 }
