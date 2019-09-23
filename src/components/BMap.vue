@@ -1,5 +1,8 @@
 <template>
-  <div class="charts" ref="myEchart"></div>
+  <div class="con">
+    <div class="charts" ref="myEchart"></div>
+    <div class="info" ref="info">一些内容</div>
+  </div>
 </template>
 
 <script>
@@ -45,7 +48,13 @@ export default {
   data() {
     return {
       chart: null,
-      mapModel: null
+      mapModel: null,
+      mapImg: require("../assets/img/bmapImg.png"),
+      mapImg1: require("../assets/img/symbol.png"),
+      mapInfoImg: require("../assets/img/mapInfo.png"),
+      mapInfoImgArror: require("../assets/img/home-right.png"),
+      markerClusterer: null, //聚合
+      markersArr: [] //聚合数据
     };
   },
   mounted() {
@@ -198,9 +207,22 @@ export default {
         .getModel()
         .getComponent("bmap")
         .getBMap();
+      //绘制东港区边界
       //this.drawBoundary("日照市东港区");
       this.drawBoundary("dg");
+      //标注停车场
+      this.drawParkingLot(this.mapImg1, "#fc2a5b"); //红色
+      setTimeout(() => {
+        this.drawParkingLot(this.mapImg, "#f6f308"); //黄色
+      }, 5000);
+
       this.resizeCharts();
+      //地图点击事件
+      this.mapModel.addEventListener("click", e => {
+        //切换时移除面板
+        // let ele = document.getElementById("mapInfo");
+        // if (ele) ele.remove();
+      });
     },
     //绘制边界
     drawBoundary(name) {
@@ -215,14 +237,169 @@ export default {
         }); //建立多边形覆盖物
         this.mapModel.addOverlay(ply); //添加覆盖物
       }
+    },
+
+    /**
+     *  绘制停车场--生成聚合数据
+     *
+     *  @param {*}  img 停车场标注图片
+     *
+     *  @param {String} 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
+     */
+    drawParkingLot(img, color) {
+      //切换时移除面板
+      let ele = document.getElementById("mapInfo");
+      if (ele) ele.remove();
+      //停车场坐标
+      let points = [
+        [119.438048, 35.439282],
+        [119.448048, 35.449282],
+        [119.458048, 35.459282],
+        [119.468048, 35.469282],
+        [119.478048, 35.479282],
+        [119.488048, 35.489282]
+      ];
+      let myIcon = new BMap.Icon(img, new BMap.Size(43, 43), {});
+      //情况聚合
+      this.clearMarkerClusterer();
+      for (let i = 0; i < points.length; i++) {
+        let _point = new BMap.Point(points[i][0], points[i][1]);
+        let marker = new BMap.Marker(_point, {
+          icon: myIcon
+        });
+        //添加标注点击事件
+        this.parkingLotClick(marker, _point, color, {
+          name: "黑龙江停车场",
+          berthNum: 100,
+          freeBerth: 88
+        });
+        this.markersArr.push(marker);
+      }
+      this.markerClusterer = new BMapLib.MarkerClusterer(this.mapModel, {
+        markers: this.markersArr
+      });
+      //  this.mapModel.addOverlay(marker);
+    },
+    /**
+     * 停车场添加点击事件
+     * @param {*} marker 停车场marker
+     * @param {*} point 百度坐标
+     * @param {*} color 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
+     *  @param {*} parkingLotInfo 停车场信息
+     */
+    parkingLotClick(marker, point, color, parkingLotInfo) {
+      marker.addEventListener("click", e => {
+        this.showParingLotInfo(point, color, parkingLotInfo);
+      });
+    },
+
+    /**
+     * 点击停车场显示弹窗
+     * @param {*} point 百度坐标
+     * @param {String} color 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
+     * @param {*} parkingLotInfo 停车场信息
+     */
+    showParingLotInfo(
+      point,
+      color = "#f6f308",
+      parkingLotInfo = { name: "停车场", berthNum: 100, freeBerth: 88 }
+    ) {
+      let ele = document.getElementById("mapInfo");
+      if (ele) ele.remove();
+      let _this = this;
+      /// 复杂的自定义覆盖物
+      function ComplexCustomOverlay(point, text, mouseoverText) {
+        this._point = point;
+        this._text = text;
+        this._overText = mouseoverText;
+      }
+      ComplexCustomOverlay.prototype = new BMap.Overlay();
+      ComplexCustomOverlay.prototype.initialize = function(map) {
+        this._map = map;
+        let div = (this._div = document.createElement("div"));
+        div.id = "mapInfo";
+        div.style.position = "absolute";
+        div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+        div.style.background = `url( ${_this.mapInfoImg} ) no-repeat center center / 100% 100%`;
+        div.style.color = "white";
+        div.style.width = "258px";
+        div.style.height = "147px";
+        div.style.whiteSpace = "nowrap";
+        div.style.MozUserSelect = "none";
+        div.style.fontSize = "12px";
+
+        //绘制内容
+        let span = `
+         <div  style='height:20px;text-align:right;line-height:20px;padding-right:13px;color:#2f7cf0'>${parkingLotInfo.name}</div>
+         
+         <div style='display:flex;justify-content: space-between;align-items: center;flex-direction: column;padding:12px 25px;'>
+            
+            <div style='width:100%;height:40px;text-align:right;display:flex;justify-content: space-between;align-items: center;flex-direction: row;border-bottom: 1px solid #193052;'>
+              <div style='display:flex;justify-content: space-between;align-items: center;flex-direction: row;'>
+                    <div style='width:6px;height:6px;margin-right: 8px;background-color: #2f7cf0;'></div>
+                    <span>泊位数量</span>
+              </div>
+                <span style="font-size: 16px;color:#2f7cf0">${parkingLotInfo.berthNum}</span>
+            </div>
+
+            <div style='width:100%;height:40px;text-align:right;display:flex;justify-content: space-between;align-items: center;flex-direction: row;border-bottom: 1px solid #193052;'>
+              <div style='display:flex;justify-content: space-between;align-items: center;flex-direction: row;'>
+                    <div style='width:6px;height:6px;margin-right: 8px;background-color: #2f7cf0;'></div>
+                    <span>泊位数量</span>
+              </div>
+                <span style="font-size: 16px;color:#2f7cf0">${parkingLotInfo.freeBerth}</span>
+            </div>
+
+
+          </div>
+        `;
+        div.innerHTML = span;
+
+        let arrow = (this._arrow = document.createElement("div"));
+        arrow.style.cssText = `position:absolute;top:51px;left:-41px;width:41px;height:20px;background:transparent;
+          border:1px dashed ${color};border-top:none;border-right:none;    box-shadow: -1px 1px 2px  ${color};
+         `;
+        div.appendChild(arrow);
+
+        map.getPanes().labelPane.appendChild(div);
+        return div;
+      };
+      ComplexCustomOverlay.prototype.draw = function() {
+        let map = this._map;
+        let pixel = map.pointToOverlayPixel(this._point);
+        this._div.style.left = pixel.x + 40 + "px"; //parseInt(this._arrow.style.left) + "px";
+        this._div.style.top = pixel.y - 40 + "px";
+      };
+      let txt = "日照停车",
+        mouseoverTxt = txt + " " + parseInt(Math.random() * 1000, 10) + "套";
+
+      let myCompOverlay = new ComplexCustomOverlay(point, "日照", mouseoverTxt);
+      this.mapModel.addOverlay(myCompOverlay);
+    },
+    //清空聚合标注
+    clearMarkerClusterer() {
+      if (!this.markerClusterer) return;
+      this.markerClusterer.clearMarkers();
+      this.markersArr = [];
     }
   }
 };
 </script>
 
 <style lang='scss' scoped>
-.charts {
+.con {
   width: 100%;
   height: 100%;
+  .charts {
+    width: 100%;
+    height: 100%;
+  }
+  .info {
+    display: none;
+    width: 5px;
+    height: 6px;
+    font-size: 1px;
+    background-color: #ececec;
+  }
 }
 </style>

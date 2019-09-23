@@ -61,16 +61,10 @@ export default {
       let max = Math.max.apply(null, this.chartsObj.data),
         min = Math.min.apply(null, this.chartsObj.data);
       return this.chartsObj.data.map(v => {
-        if (v == max)
+        if (v == max || v == min)
           return {
             value: v,
             symbol: this.img[0],
-            symbolSize: 15
-          };
-        else if (v == min)
-          return {
-            value: v,
-            symbol: this.img[1],
             symbolSize: 15
           };
         else return v;

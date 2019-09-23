@@ -4,7 +4,7 @@
       <div class="home-left-top">
         <div class="logo">
           <span class="logoName">日照智慧停车监控中心</span>
-          <span class="time">2019-10-10 10:10:10</span>
+          <span class="time">{{sysTime}}</span>
         </div>
         <div class="top-count">
           <div class="statistical-type type-margin">
@@ -73,7 +73,7 @@
             <div class="left-bottom wisdom-left-content-h wisdom-border-1px">
               <div class="home-float left-bottom-bg">
                 <div class="title">周转率</div>
-                <div class="amount">15</div>
+                <div class="amount">{{velocity | formatToPrice }}</div>
               </div>
               <div class="home-float left-bottom-item">
                 <!-- <charts-title name="最近三十天周转率" /> -->
@@ -114,7 +114,7 @@
           <div class="left wisdom-left-width">
             <div class="type-name">会员总数</div>
             <div class="amount wisdom-amount">
-              <span class="amount-num">14585</span>
+              <span class="amount-num">{{membersNum | formatToPrice}}</span>
               <span class="amount-unit">万</span>
             </div>
           </div>
@@ -122,7 +122,7 @@
           <div class="right">
             <span class="type-name">30天活跃数</span>
             <div class="wisdom-right-line"></div>
-            <span class="amount">14585</span>
+            <span class="amount">{{activeMembersNum | formatToPrice}}</span>
           </div>
         </div>
 
@@ -130,7 +130,7 @@
           <div class="left wisdom-left-width">
             <div class="type-name">车辆总数</div>
             <div class="amount wisdom-amount">
-              <span class="amount-num">14585</span>
+              <span class="amount-num">{{vehiclesNum | formatToPrice}}</span>
               <span class="amount-unit">万</span>
             </div>
           </div>
@@ -138,7 +138,7 @@
           <div class="right">
             <span class="type-name">30天活跃数</span>
             <div class="wisdom-right-line"></div>
-            <span class="amount">14585</span>
+            <span class="amount">{{activeVehiclesNum | formatToPrice}}</span>
           </div>
         </div>
         <div class="wisdom-right-top-line">
@@ -148,7 +148,7 @@
         <div class="right-top-item wisdom-right-bottom-height right-top-item-bottom-bg">
           <div class="content">
             <div class="title">今日订单总数</div>
-            <div class="amount">2554545</div>
+            <div class="amount">{{todayOrderNum | formatToPrice}}</div>
           </div>
         </div>
       </div>
@@ -210,8 +210,15 @@ export default {
   },
   data() {
     return {
+      sysTime: "", //系统时间
       vehicles: 1548, //车辆数量
       berth: 5848, //泊位数量
+      membersNum: 12548, //会员总数
+      activeMembersNum: 1258, //30天会员活跃数
+      vehiclesNum: 14582, //车辆总数
+      activeVehiclesNum: 584, //30天车辆活跃数
+      todayOrderNum: 12547, //今日订单数
+      velocity: 12, //周转率
       parkingLotData: [
         "全部停车场",
         "门前三包区域停车场",
@@ -241,10 +248,35 @@ export default {
     changeParkingLot(index) {
       if (this.activeParkingLotType == index) return;
       this.activeParkingLotType = index;
+    },
+    /**
+     * 获取系统时间
+     */
+    getSystemTime() {
+      let now = new Date(),
+        year = now.getFullYear(), //得到年份
+        month = now.getMonth(), //得到月份
+        date = now.getDate(), //得到日期
+        day = now.getDay(), //得到周几
+        hour = now.getHours(), //得到小时
+        minu = now.getMinutes(), //得到分钟
+        sec = now.getSeconds(); //得到秒
+      if (month < 10) month = "0" + month;
+      if (date < 10) date = "0" + date;
+      if (hour < 10) hour = "0" + hour;
+      if (minu < 10) minu = "0" + minu;
+      if (sec < 10) sec = "0" + sec;
+      this.sysTime =
+        year + "-" + month + "-" + date + " " + hour + ":" + minu + ":" + sec;
+      setTimeout(() => {
+        this.getSystemTime();
+      }, 1000);
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getSystemTime();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -296,7 +328,7 @@ $clearance: 4px;
       @include homeFlex(center, space-between);
       .logo {
         height: 100%;
-        @include homeFlex(flex-start, center);
+        @include homeFlex(flex-start, space-between);
         flex-direction: column;
         .logoName {
           letter-spacing: 1px;
@@ -346,6 +378,7 @@ $clearance: 4px;
               font-size: 8px;
               color: #fe2959;
               font-weight: 600;
+              font-family: "DS-Digital";
             }
           }
         }
@@ -450,6 +483,7 @@ $clearance: 4px;
                 text-align: center;
                 font-size: 10px;
                 color: #fe2959;
+                font-family: "DS-Digital";
               }
             }
             .left-bottom-item {
@@ -519,20 +553,20 @@ $clearance: 4px;
           height: 34px; //44px
           .title {
             width: 100%;
-            height: 6px;
+            height: 3px;
             padding-right: 4px;
-            line-height: 6px;
             text-align: center;
             font-size: 4px;
             color: #548cc2;
           }
           .amount {
-            height: 28px;
+            height: 34px;
             width: 100%;
             @include homeFlex(center, center);
             font-size: 14px;
             text-align: center;
             color: #f43b66;
+            font-family: "DS-Digital";
           }
         }
       }
@@ -584,6 +618,7 @@ $clearance: 4px;
             color: #6ba2ef;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: "DS-Digital";
             .amount-unit {
               font-size: 6px;
             }
@@ -612,6 +647,7 @@ $clearance: 4px;
           .amount {
             font-size: 9px;
             color: #6ba2ef;
+            font-family: "DS-Digital";
           }
         }
       }
