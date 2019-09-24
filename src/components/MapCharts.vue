@@ -7,9 +7,7 @@ import echarts from "echarts";
 import resize from "@/mixin/chartsResize";
 //import 'echarts/map/js/china' // 引入中国地图数据
 
-//import rizhaoJson from "@/assets/data/rizhaoMap.json";
-//东港区数据
-import rizhaoJson from "@/assets/data/rizhaoDg.json";
+import rizhaoJson from "@/assets/data/rizhaoMap.json";
 
 echarts.registerMap("rizhao", rizhaoJson);
 
@@ -42,47 +40,46 @@ export default {
         backgroundColor: "transparent",
         tooltip: {
           show: false
-        }, // 鼠标移到图里面的浮动提示框
-        geo: {
-          // 这个是重点配置区
-          map: "rizhao", //日照地图
-          roam: true, //可以缩放地图
-          zoom: 1,
-          label: {
-            normal: {
-              show: true, // 是否显示对应地名
-              textStyle: {
-                //字体颜色
-                color: "#fff",
-                fontSize: 8
-              }
-            },
-            emphasis: {
-              show: true,
-              textStyle: {
-                color: "#fff"
-              }
-            }
-          },
-          itemStyle: {
-            normal: {
-              borderColor: "#0e97ff",
-              borderWidth: 2,
-              areaColor: "#142445"
-            },
-            emphasis: {
-              areaColor: "#142445"
-            }
-          }
+        }, 
+        tooltip:{
+            show:false,
         },
-
+      
+ visualMap: {
+      show:false,
+              type:"piecewise",
+                pieces: [{max: 30 }, {  min: 31 }
+                ],
+                color:['#3a377a', '#142445'],
+                  calculable: true
+            },
         series: [
           {
             name: "rizhao", // 浮动框的标题
             type: "map",
-            roam: false,
+              map: "rizhao", //日照地图
+          roam: false, //可以缩放地图
+          zoom: 2,
+          center: [119.30, 35.439282],
             geoIndex: 1,
-            data: []
+                   itemStyle: {
+                   
+            normal: {
+              borderColor: "#0e97ff",
+              borderWidth: 1,
+              areaColor: "#142445"
+            },
+           
+          },
+           emphasis: {
+             label:{
+                  show:false,
+             },
+             itemStyle:{
+              areaColor: "#3a377a"
+             }
+            },
+            data: [{name:"莒县",value:10},{name:"五莲县",value:10},{name:"岚山区",value:10},{name:"东港区",value:80}]
           }
         ]
       });

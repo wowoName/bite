@@ -46,6 +46,47 @@ export default {
             fontSize: 10
           }
         },
+         grid: {
+          //这个是用来设置echarts图标的位置和其他设置
+          left: '20%',
+          right: '20%',
+          bottom: '20%',
+          top:'20%',
+          containLabel: true 
+        },
+          xAxis: {
+        type: 'category',
+          axisLabel:{
+            show:false
+        },
+         axisLine: {
+            show: false,
+            lineStyle: {
+              width: 2,
+              color: "#535a68" //X轴样式
+            }
+          },
+        data: []
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel:{
+            show:false
+        },
+        axisTick:{
+            show:false
+        },
+         axisLine: {
+            show: false,
+            lineStyle: {
+              width: 2,
+              color: "#535a68" //X轴样式
+            }
+          },
+          splitLine: {
+            show: false
+          }
+    },
         tooltip: {
           show: false,
           trigger: "item",
@@ -58,6 +99,7 @@ export default {
           type: "text",
           left: "center",
           top: "center",
+          zlevel: 11,
           style: {
             text: "36.6%", //这是百分比
             textAlign: "center",
@@ -70,8 +112,9 @@ export default {
           {
             name: "",
             type: "pie",
-            radius: ["50%", "68%"],
+            radius: ["50%", "65%"],
             center: ["center", "center"],
+              zlevel: 10,
             hoverAnimation: false,
             avoidLabelOverlap: false,
             label: {
@@ -85,25 +128,28 @@ export default {
               }
             },
             data: [
-              //注意 第一个未将要显示得真实值  第二个值未 按照
               {
-                value: 20,
+                value: 20,//100 - n
                 itemStyle: {
-                  color: "transparent"
+                  color: "#1e2833"
                 }
               },
               {
-                value: 80,
+                value: 80,//真实 数据
                 name: "",
                 itemStyle: {
                   color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                     {
                       offset: 0,
-                      color: "#e68399"
+                      color: "#f03f68"
+                    },
+                      {
+                      offset: 0.5,
+                      color: "#f03f68"
                     },
                     {
                       offset: 1,
-                      color: "#f2436a"
+                      color: "#f86e8b"
                     }
                   ])
                 },
@@ -127,8 +173,126 @@ export default {
                   }
                 }
               }
+            
             ]
-          }
+          },
+            {
+        type: 'pie',
+        zlevel: 11,
+        silent: true,
+        radius: ['70%', '73%'],
+        hoverAnimation: false,
+         itemStyle: {
+                  color: '#59729d'
+                },
+        label: {
+            normal: {
+                show: false
+            },
+        },
+        labelLine: {
+            normal: {
+                show: false
+            }
+        },
+        data:[1]
+    }, {
+        type: 'pie',
+        zlevel: 11,
+        silent: true,
+        radius: ['79%', '81%'],
+        hoverAnimation: false,
+      itemStyle: {
+                  color: '#20324a'
+                },
+        label: {
+            normal: {
+                show: false
+            },
+        },
+        labelLine: {
+            normal: {
+                show: false
+            }
+        },
+        data:[1]
+    },
+    //  {
+    //         type: 'pie',
+    //         zlevel: 4,
+    //         silent: true,
+    //         radius: ['87%', '90%'],
+    //         label: {
+    //             normal: {
+    //                 show: false
+    //             },
+    //         },
+    //         labelLine: {
+    //             normal: {
+    //                 show: false
+    //             }
+    //         },
+    //         color:['#000','#2196F3'],
+    //         data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    //     },
+  
+          {
+            name: "",
+            type: 'gauge',
+            splitNumber:30, //刻度数量
+            min: 0,
+            max: 100,
+            radius: '85%', //图表尺寸
+            center: ['50%', '50%'],
+            startAngle: 90,
+            endAngle: -269.9999,
+            axisLine: {
+                show: false,
+                lineStyle: {
+                    width: 0,
+                    shadowBlur: 0,
+                    color: [
+                        [1, '#565966']
+                    ]
+                }
+            },
+            axisTick: {
+                show: false,
+                lineStyle: {
+                    color: 'auto',
+                    width: 1
+                },
+                length: 20,
+                splitNumber: 5
+            },
+            splitLine: {
+                show: true,
+                length: 2,
+                lineStyle: {
+                    color: 'auto',
+                }
+            },
+            axisLabel: {
+                show: false
+            },
+            pointer: { //仪表盘指针
+                show: 0,
+            },
+            detail: {
+                show: 0,
+            },
+        },
+       {
+        data: [0, 1],
+        symbol:'none',
+         lineStyle: {
+              normal: {
+                width: 2,
+                color: "#16202b"
+              }
+            },
+        type: 'line'
+    }
         ]
       });
       this.resizeCharts();

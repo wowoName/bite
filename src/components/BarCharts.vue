@@ -171,7 +171,7 @@ export default {
             type: "value",
             min: 0,
             max: 100,
-            splitNumber: 10, //背景条数
+            splitNumber: 29, //背景条数
             splitLine: {
               show: false
             },

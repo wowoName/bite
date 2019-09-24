@@ -1,8 +1,7 @@
 <template>
-  <div class="con">
+ 
     <div class="charts" ref="myEchart"></div>
-    <div class="info" ref="info">一些内容</div>
-  </div>
+
 </template>
 
 <script>
@@ -13,11 +12,11 @@ import "echarts/extension/bmap/bmap";
 //地图数据
 import mapData from "@/assets/data/mapData";
 //import 'echarts/map/js/china' // 引入中国地图数据
-import rizhaoJson1 from "@/assets/data/rizhaoMap.json";
+//import rizhaoJson from "@/assets/data/rizhaoMap.json";
 //东港区数据
-import rizhaoJson from "@/assets/data/rizhaoDg.json";
+//import rizhaoJson from "@/assets/data/donggang.json";
 
-echarts.registerMap("rizhao", rizhaoJson);
+//echarts.registerMap("rizhao", rizhaoJson);
 //东港区边界数据
 import rizhaoBoundary from "@/assets/data/mapData";
 
@@ -71,10 +70,9 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$refs.myEchart);
-      // 把配置和数据放这里
       this.chart.setOption({
         bmap: {
-          center: [119.468048, 35.439282],
+          center: [119.3, 35.439282],
           zoom: 11,
           roam: true, //地图是否可缩放
           mapStyle: {
@@ -207,22 +205,38 @@ export default {
         .getModel()
         .getComponent("bmap")
         .getBMap();
-      //绘制东港区边界
-      //this.drawBoundary("日照市东港区");
-      this.drawBoundary("dg");
+        //设置地图相关属性
+        this.setMapPro();
       //标注停车场
-      this.drawParkingLot(this.mapImg1, "#fc2a5b"); //红色
-      setTimeout(() => {
-        this.drawParkingLot(this.mapImg, "#f6f308"); //黄色
-      }, 5000);
+      this.drawParkingLot(this.mapImg1); 
 
       this.resizeCharts();
       //地图点击事件
       this.mapModel.addEventListener("click", e => {
-        //切换时移除面板
-        // let ele = document.getElementById("mapInfo");
-        // if (ele) ele.remove();
+      if(e.overlay==null){
+          let ele = document.getElementById("mapInfo");
+         if (ele) ele.remove();
+      }
+       
       });
+    },
+    //设置地图属性
+    setMapPro(){
+      //设置最下缩放等级
+         this.mapModel.setMinZoom(10);
+            this.mapModel.addControl(new BMap.NavigationControl({
+        anchor : BMAP_ANCHOR_TOP_RIGHT
+    }));    
+             //绘制东港区边界
+      this.drawBoundary("dg");
+    
+    //   //限制拖动范围
+    //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
+    // try {   
+    //     BMapLib.AreaRestriction.setBounds(this.mapModel, b);
+    // } catch (e) {
+    //     alert(e);
+    // }
     },
     //绘制边界
     drawBoundary(name) {
@@ -253,9 +267,9 @@ export default {
       //停车场坐标
       let points = [
         [119.438048, 35.439282],
-        [119.448048, 35.449282],
-        [119.458048, 35.459282],
-        [119.468048, 35.469282],
+        [119.548048, 35.449282],
+        [119.23, 35.459282],
+        [119.32, 35.5],
         [119.478048, 35.479282],
         [119.488048, 35.489282]
       ];
@@ -284,13 +298,23 @@ export default {
      * 停车场添加点击事件
      * @param {*} marker 停车场marker
      * @param {*} point 百度坐标
-     * @param {*} color 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
-     *  @param {*} parkingLotInfo 停车场信息
+     * @param {*} parkingLotInfo 停车场信息
      */
-    parkingLotClick(marker, point, color, parkingLotInfo) {
+    parkingLotClick(marker, point, parkingLotInfo) {
+       let _this=this;
       marker.addEventListener("click", e => {
-        this.showParingLotInfo(point, color, parkingLotInfo);
+        this.showParingLotInfo(point,  parkingLotInfo);
       });
+
+      //鼠标移动上事件
+      marker.addEventListener("mouseover", function () {
+this.setIcon(new BMap.Icon(_this.mapImg,new BMap.Size(43,43)));
+});
+
+    marker.addEventListener("mouseout", function () {
+this.setIcon(new BMap.Icon(_this.mapImg1,new BMap.Size(43,43)));
+});
+
     },
 
     /**
@@ -301,7 +325,6 @@ export default {
      */
     showParingLotInfo(
       point,
-      color = "#f6f308",
       parkingLotInfo = { name: "停车场", berthNum: 100, freeBerth: 88 }
     ) {
       let ele = document.getElementById("mapInfo");
@@ -355,9 +378,10 @@ export default {
         `;
         div.innerHTML = span;
 
-        let arrow = (this._arrow = document.createElement("div"));
+        let arrow =  document.createElement("div");
+        arrow.id='mapInfoArrow'
         arrow.style.cssText = `position:absolute;top:51px;left:-41px;width:41px;height:20px;background:transparent;
-          border:1px dashed ${color};border-top:none;border-right:none;    box-shadow: -1px 1px 2px  ${color};
+          border:1px dashed #4a5a74 ;border-top:none;border-right:none;;
          `;
         div.appendChild(arrow);
 
@@ -387,19 +411,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.con {
-  width: 100%;
-  height: 100%;
-  .charts {
+ .charts {
     width: 100%;
     height: 100%;
   }
-  .info {
-    display: none;
-    width: 5px;
-    height: 6px;
-    font-size: 1px;
-    background-color: #ececec;
-  }
-}
 </style>

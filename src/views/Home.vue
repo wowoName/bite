@@ -89,6 +89,7 @@
         <div class="content-right">
           <div class="content-right-top wisdom-map">
             <div class="content-right-top-scale wisdom-content-right-top-scale">
+               <div class="mask wisdom-mask"></div>
               <map-charts></map-charts>
             </div>
             <!-- <map-charts></map-charts> -->
@@ -438,9 +439,9 @@ $clearance: 4px;
                 @include homeFlex();
                 height: 50%;
                 width: 100%;
-                background: url(../assets/img/pieCharts.png) no-repeat center
-                  center / 85% auto;
-                position: relative;
+                // background: url(../assets/img/pieCharts.png) no-repeat center
+                //   center / 85% auto;
+                // position: relative;
               }
             }
             .wisdom-4px {
@@ -498,8 +499,11 @@ $clearance: 4px;
         height: 100%;
         @include homeFlex(center, space-between);
         flex-direction: column;
+        
         .wisdom-map {
           height: calc(70% - 4px);
+          padding:1px;
+          box-sizing:border-box;
         }
         .content-right-top {
           width: 100%;
@@ -513,9 +517,25 @@ $clearance: 4px;
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 20%;
-            height: 30%;
+            width:60px;
+            height: 60px;
             z-index: 10;
+            background-color:rgba(0,1,3,.5);
+           
+            .wisdom-mask{
+              border:1px solid rgb(179, 5, 6);
+              border-radius:2px;
+            }
+.mask{
+  position:absolute;
+  top:13px;
+  right:1px;
+  width:48px;
+height:40px;
+background-color:rgba(60,34,45,0.5);
+
+z-index:10
+}
           }
         }
         .content-right-bottom {
