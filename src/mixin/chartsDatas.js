@@ -1,6 +1,8 @@
 export default {
     data() {
         return {
+            utilizationPie: 66.6, //饼状图 利用率 amx 100
+            vacancyRatePie: 88.8, //饼状图  空置率 100
             thVelocityObj: { //30天周转率数据
                 data: [], //数据
                 xAxisData: [
@@ -142,10 +144,12 @@ export default {
                     "24",
                 ]
             },
-            orderDataObj: {
+            orderDataObjBar: [10, 8, 5], //最近三十天订单信息--横向柱状图
+            orderDataObj: { //最近三十天订单数据
                 barData: [],
                 lineData: [],
-                xAxisData: ["01",
+                xAxisData: [ //x轴数据
+                    "01",
                     "02",
                     "03",
                     "04",
@@ -177,7 +181,44 @@ export default {
                     "30",
                     "31"
                 ]
-            }
+            },
+            todayOrderData: [1, 5, 6, 8], //今日订单数据 :"进行中", "欠费", "已缴费", "0元订单"
+            //地图数据
+            mapData: [{
+                type: 'inducedParking',
+                name: "诱导停车场",
+                data: [{
+                        parkignName: "黑龙江停车场",
+                        berthNum: 333,
+                        freeBerth: 330,
+                        lonlat: [119.43, 35.34]
+                    },
+                    {
+                        parkignName: "A停车场",
+                        berthNum: 666,
+                        freeBerth: 660,
+                        lonlat: [119.44, 35.45]
+                    }
+
+                ]
+            }, {
+                type: 'parkingLot',
+                name: "停车场",
+                data: [{
+                        parkignName: "B停车场",
+                        berthNum: 111,
+                        freeBerth: 110,
+                        lonlat: [119.55, 35.43]
+                    },
+                    {
+                        parkignName: "C停车场",
+                        berthNum: 222,
+                        freeBerth: 220,
+                        lonlat: [119.26, 35.42]
+                    }
+                ]
+            }]
+
 
         }
     },
@@ -194,6 +235,7 @@ export default {
         this.getVehicleData()
             //最近30天订单信息
         this.getOrderDataObj()
+
     },
     methods: {
         getRandomNum(count) {
@@ -205,7 +247,7 @@ export default {
         },
         //获取30天周转率数据
         getThVelocityObj() {
-            this.thVelocityObj.data = this.getRandomNum(30);
+            this.thVelocityObj.data = this.getRandomNum(31);
         },
         //获取12个月周转率数据
         getMtVelocityObj() {

@@ -108,7 +108,7 @@ export default {
             color: "#535a68",
             fontSize: 8,
             margin: 10,
-            padding: [0, 0, -18, -12],
+            padding: [0, 0, -18, -6],
             rich: {
               a: {}
             }

@@ -9,6 +9,11 @@ export default new Router({
             name: 'home',
             component: () =>
                 import ( /* webpackChunkName: "about" */ './views/Home.vue')
+        }, {
+            path: '/slider',
+            name: 'slider',
+            component: () =>
+                import ( /* webpackChunkName: "about" */ './views/Slider.vue')
         }
 
     ]

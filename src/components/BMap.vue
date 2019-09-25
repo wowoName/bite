@@ -1,7 +1,5 @@
 <template>
- 
-    <div class="charts" ref="myEchart"></div>
-
+  <div class="charts" ref="myEchart"></div>
 </template>
 
 <script>
@@ -24,20 +22,27 @@ import resize from "@/mixin/chartsResize";
 export default {
   name: "pieCharts",
   props: {
-    chartsObj: {
-      type: Object,
+    mapData: {
+      type: Array,
       default: () => {
-        return {
-          data: [],
-          xAxisData: [],
-          colors: ["#f33b65", "#bb6ea4"]
-        };
+        return [
+          {
+            type: "inducedParking",
+            name: "诱导停车场",
+            data: []
+          },
+          {
+            type: "parkingLot",
+            name: "停车场",
+            data: []
+          }
+        ];
       }
     }
   },
   mixins: [resize],
   watch: {
-    chartsObj: {
+    mapData: {
       handler() {
         this.initChart();
       },
@@ -48,8 +53,10 @@ export default {
     return {
       chart: null,
       mapModel: null,
-      mapImg: require("../assets/img/bmapImg.png"),
-      mapImg1: require("../assets/img/symbol.png"),
+      mapImg1: require("../assets/img/bmapImg.png"), //诱导停车场图片
+      mapImg: require("../assets/img/symbol.png"),
+      parkingLotImg: require("../assets/img/parkingLotA.gif"), //停车场图片
+      parkingLotImg1: require("../assets/img/parkinglotD.gif"),
       mapInfoImg: require("../assets/img/mapInfo.png"),
       mapInfoImgArror: require("../assets/img/home-right.png"),
       markerClusterer: null, //聚合
@@ -205,38 +212,40 @@ export default {
         .getModel()
         .getComponent("bmap")
         .getBMap();
-        //设置地图相关属性
-        this.setMapPro();
+      //设置地图相关属性
+      this.setMapPro();
+      //标注诱导停车场
       //标注停车场
-      this.drawParkingLot(this.mapImg1); 
+      this.drawParkingLot(this.mapImg1);
 
       this.resizeCharts();
       //地图点击事件
       this.mapModel.addEventListener("click", e => {
-      if(e.overlay==null){
+        if (e.overlay == null) {
           let ele = document.getElementById("mapInfo");
-         if (ele) ele.remove();
-      }
-       
+          if (ele) ele.remove();
+        }
       });
     },
     //设置地图属性
-    setMapPro(){
+    setMapPro() {
       //设置最下缩放等级
-         this.mapModel.setMinZoom(10);
-            this.mapModel.addControl(new BMap.NavigationControl({
-        anchor : BMAP_ANCHOR_TOP_RIGHT
-    }));    
-             //绘制东港区边界
+      this.mapModel.setMinZoom(10);
+      // this.mapModel.addControl(
+      //   new BMap.NavigationControl({
+      //     anchor: BMAP_ANCHOR_TOP_RIGHT
+      //   })
+      // );
+      //绘制东港区边界
       this.drawBoundary("dg");
-    
-    //   //限制拖动范围
-    //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
-    // try {   
-    //     BMapLib.AreaRestriction.setBounds(this.mapModel, b);
-    // } catch (e) {
-    //     alert(e);
-    // }
+
+      //   //限制拖动范围
+      //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
+      // try {
+      //     BMapLib.AreaRestriction.setBounds(this.mapModel, b);
+      // } catch (e) {
+      //     alert(e);
+      // }
     },
     //绘制边界
     drawBoundary(name) {
@@ -255,40 +264,34 @@ export default {
 
     /**
      *  绘制停车场--生成聚合数据
-     *
-     *  @param {*}  img 停车场标注图片
-     *
-     *  @param {String} 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
      */
-    drawParkingLot(img, color) {
+    drawParkingLot() {
       //切换时移除面板
       let ele = document.getElementById("mapInfo");
       if (ele) ele.remove();
-      //停车场坐标
-      let points = [
-        [119.438048, 35.439282],
-        [119.548048, 35.449282],
-        [119.23, 35.459282],
-        [119.32, 35.5],
-        [119.478048, 35.479282],
-        [119.488048, 35.489282]
-      ];
-      let myIcon = new BMap.Icon(img, new BMap.Size(43, 43), {});
-      //情况聚合
+
+      //清楚聚合
       this.clearMarkerClusterer();
-      for (let i = 0; i < points.length; i++) {
-        let _point = new BMap.Point(points[i][0], points[i][1]);
-        let marker = new BMap.Marker(_point, {
-          icon: myIcon
-        });
-        //添加标注点击事件
-        this.parkingLotClick(marker, _point, color, {
-          name: "黑龙江停车场",
-          berthNum: 100,
-          freeBerth: 88
-        });
-        this.markersArr.push(marker);
+      //停车场坐标
+      for (let i = 0; i < this.mapData.length; i++) {
+        let _type = this.mapData[i].type;
+        let myIcon = new BMap.Icon(
+          _type == "parkingLot" ? this.parkingLotImg : this.mapImg,
+          new BMap.Size(43, 43),
+          {}
+        );
+        let points = this.mapData[i].data;
+        for (let i = 0; i < points.length; i++) {
+          let _point = new BMap.Point(points[i].lonlat[0], points[i].lonlat[1]);
+          let marker = new BMap.Marker(_point, {
+            icon: myIcon
+          });
+          //添加标注点击事件
+          this.parkingLotClick(marker, _point, points[i], _type);
+          this.markersArr.push(marker);
+        }
       }
+
       this.markerClusterer = new BMapLib.MarkerClusterer(this.mapModel, {
         markers: this.markersArr
       });
@@ -299,22 +302,33 @@ export default {
      * @param {*} marker 停车场marker
      * @param {*} point 百度坐标
      * @param {*} parkingLotInfo 停车场信息
+     * @param {*} type 停车场类型
      */
-    parkingLotClick(marker, point, parkingLotInfo) {
-       let _this=this;
+    parkingLotClick(marker, point, parkingLotInfo, type) {
+      let _this = this;
       marker.addEventListener("click", e => {
-        this.showParingLotInfo(point,  parkingLotInfo);
+        this.showParingLotInfo(point, parkingLotInfo);
       });
 
       //鼠标移动上事件
-      marker.addEventListener("mouseover", function () {
-this.setIcon(new BMap.Icon(_this.mapImg,new BMap.Size(43,43)));
-});
+      marker.addEventListener("mouseover", function() {
+        let img = type == "parkingLot" ? this.parkingLotImg : this.mapImg;
+        this.setIcon(
+          new BMap.Icon(
+            type == "parkingLot" ? _this.parkingLotImg1 : _this.mapImg1,
+            new BMap.Size(43, 43)
+          )
+        );
+      });
 
-    marker.addEventListener("mouseout", function () {
-this.setIcon(new BMap.Icon(_this.mapImg1,new BMap.Size(43,43)));
-});
-
+      marker.addEventListener("mouseout", function() {
+        this.setIcon(
+          new BMap.Icon(
+            type == "parkingLot" ? _this.parkingLotImg : _this.mapImg,
+            new BMap.Size(43, 43)
+          )
+        );
+      });
     },
 
     /**
@@ -325,7 +339,7 @@ this.setIcon(new BMap.Icon(_this.mapImg1,new BMap.Size(43,43)));
      */
     showParingLotInfo(
       point,
-      parkingLotInfo = { name: "停车场", berthNum: 100, freeBerth: 88 }
+      parkingLotInfo = { parkignName: "停车场", berthNum: 100, freeBerth: 88 }
     ) {
       let ele = document.getElementById("mapInfo");
       if (ele) ele.remove();
@@ -353,7 +367,7 @@ this.setIcon(new BMap.Icon(_this.mapImg1,new BMap.Size(43,43)));
 
         //绘制内容
         let span = `
-         <div  style='height:20px;text-align:right;line-height:20px;padding-right:13px;color:#2f7cf0'>${parkingLotInfo.name}</div>
+         <div  style='height:20px;text-align:right;line-height:20px;padding-right:13px;color:#2f7cf0'>${parkingLotInfo.parkignName}</div>
          
          <div style='display:flex;justify-content: space-between;align-items: center;flex-direction: column;padding:12px 25px;'>
             
@@ -378,8 +392,8 @@ this.setIcon(new BMap.Icon(_this.mapImg1,new BMap.Size(43,43)));
         `;
         div.innerHTML = span;
 
-        let arrow =  document.createElement("div");
-        arrow.id='mapInfoArrow'
+        let arrow = document.createElement("div");
+        arrow.id = "mapInfoArrow";
         arrow.style.cssText = `position:absolute;top:51px;left:-41px;width:41px;height:20px;background:transparent;
           border:1px dashed #4a5a74 ;border-top:none;border-right:none;;
          `;
@@ -411,8 +425,8 @@ this.setIcon(new BMap.Icon(_this.mapImg1,new BMap.Size(43,43)));
 </script>
 
 <style lang='scss' scoped>
- .charts {
-    width: 100%;
-    height: 100%;
-  }
+.charts {
+  width: 100%;
+  height: 100%;
+}
 </style>

@@ -8,15 +8,38 @@ import echarts from "echarts";
 import resize from "@/mixin/chartsResize";
 export default {
   name: "TransBarCharts",
-  props: {},
+  props: {
+    data: {
+      type: Array,
+      default: () => {
+        return [0, 0, 0, 0];
+      }
+    }
+  },
+  watch: {
+    data: {
+      handler() {
+        this.initChart();
+      },
+      deep: true
+    }
+  },
   data() {
     return {
       chart: null
     };
   },
+  computed: {
+    maxData() {
+      let max = Math.max.apply(Math, this.data),
+        _max = max * 1.1;
+      _max = _max < 10 ? 10 : _max;
+      return [_max, _max, _max, _max];
+    }
+  },
   mixins: [resize],
-  props: {},
   mounted() {
+    console.log(this.data, this.maxData);
     this.initChart();
   },
   beforeDestroy() {
@@ -35,13 +58,33 @@ export default {
         grid: {
           //这个是用来设置echarts图标的位置和其他设置
           left: 2,
-          right: 20,
+          right: 30,
           bottom: 0,
           top: 0,
           containLabel: true //一般都带上这个，否则x,y轴的刻度值会被截取掉
         },
+        tooltip: {
+          trigger: "axis",
+          formatter: params => {
+            return params[0].name + ":" + params[0].value + "万";
+          },
+          axisPointer: {
+            animation: false
+          }
+        },
         xAxis: {
           show: true,
+          name: "/万", //x轴 单位
+          nameLocation: "end",
+          nameTextStyle: {
+            color: "#535a68",
+            fontSize: 9,
+            margin: 10,
+            padding: [0, 0, -18, -5],
+            rich: {
+              a: {}
+            }
+          },
           axisTick: {
             show: false,
             inside: true,
@@ -127,7 +170,7 @@ export default {
             name: "条",
             type: "bar",
             yAxisIndex: 0,
-            data: [10, 20, 30, 40],
+            data: this.data,
             barWidth: "50%",
             itemStyle: {
               normal: {
@@ -162,7 +205,7 @@ export default {
             type: "bar",
             yAxisIndex: 1,
             barGap: "-100%",
-            data: [100, 100, 100, 100], //应该为最大值
+            data: this.maxData, //应该为最大值
             barWidth: "50%",
             itemStyle: {
               normal: {

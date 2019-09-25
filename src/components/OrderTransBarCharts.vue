@@ -7,12 +7,11 @@ import echarts from "echarts";
 import resize from "@/mixin/chartsResize";
 export default {
   name: "TransBarCharts",
-  props: {},
+
   data() {
     return {
       chart: null,
-      maxData: [400, 400, 400, 400],
-      img: require("../assets/img/symbol.png")
+      fontScale: 1 //字体的缩放大小
     };
   },
   mixins: [resize],
@@ -21,19 +20,36 @@ export default {
     yData: {
       type: Array,
       default: () => {
-        return ["进行中", "欠费", "已交", "0元订单"];
+        return ["欠费", "已交", "0元订单"];
       }
     },
     //数据
     barData: {
       type: Array,
       default: () => {
-        return [145, 260, 88, 356];
+        return [0, 0, 0];
       }
     }
   },
+  watch: {
+    barData: {
+      handler() {
+        alert("变化了");
+        this.initChart();
+      },
+      deep: true
+    }
+  },
+  computed: {
+    maxData() {
+      let max = Math.max.apply(Math, this.barData),
+        _max = max * 1.2;
+      _max = _max < 10 ? 10 : _max;
+      return [_max, _max, _max];
+    }
+  },
   mounted() {
-    this.maxData = this.maxData.slice(0, this.barData.length);
+    this.fontScale = document.documentElement.clientWidth / 1920;
     this.initChart();
   },
   beforeDestroy() {
@@ -51,17 +67,16 @@ export default {
       myChart.setOption({
         grid: [
           {
-            left: 40,
+            left: "10%",
             bottom: 15,
             top: "10%",
-            right: 20
+            right: 35
           }
         ],
         tooltip: {
           trigger: "axis",
           formatter: params => {
-            console.log(params);
-            return params[2].name + ":" + params[2].value;
+            return params[2].name + ":" + params[2].value * 10 + "万";
           },
           axisPointer: {
             animation: false
@@ -69,6 +84,17 @@ export default {
         },
         xAxis: {
           show: true,
+          name: "/十万", //x轴 单位
+          nameLocation: "end",
+          nameTextStyle: {
+            color: "#535a68",
+            fontSize: 9 * this.fontScale,
+            margin: 10,
+            padding: [0, 0, -18, -5],
+            rich: {
+              a: {}
+            }
+          },
           axisTick: {
             show: false,
             inside: true,
@@ -90,7 +116,7 @@ export default {
             margin: 3,
             textStyle: {
               color: "#535a68", //X轴文字颜色
-              fontSize: 9
+              fontSize: 11 * this.fontScale
             }
           },
           splitLine: {
@@ -98,7 +124,7 @@ export default {
           }
         },
         yAxis: {
-          data: ["进行中", "欠费", "已交费", "0元订单"],
+          data: ["欠费", "已交费", "0元订单"],
           splitLine: {
             show: false
           },
@@ -109,7 +135,7 @@ export default {
           axisLabel: {
             show: true,
             color: "#535a68", //y轴文字颜色
-            fontSize: 8
+            fontSize: 9.5 * this.fontScale
           },
           axisLine: {
             show: false,
@@ -123,7 +149,7 @@ export default {
             // 外边框
             name: "",
             type: "bar", //echarts图的类型
-            barWidth: "60%",
+            barWidth: "50%",
             barGap: "-89%",
             barHeight: "100%",
             itemStyle: {
@@ -131,29 +157,15 @@ export default {
                 color: "#0c1830" //3f474d
               }
             },
-            z: 1, //图层值
-            data: [100, 100, 100, 100]
+            z: 10, //图层值
+            data: this.maxData
           },
-          // {
-          //   // 内边框
-          //   name: "",
-          //   type: "bar",
-          //   barWidth: "40%",
-          //   barHeight: "100%",
-          //   itemStyle: {
-          //     normal: {
-          //       color: "#212f5f"
-          //     }
-          //   },
-          //   zLevel: 1, //图层值
-          //   data: [100, 100, 100, 100]
-          // },
           {
             name: "",
             type: "pictorialBar",
-            symbol: "rrect",
-            barWidth: "50%",
-            symbolSize: ["14%", "90%"],
+            symbol: "rect",
+            barWidth: "40%",
+            symbolSize: ["14%", "100%"],
             symbolMargin: "200%",
             symbolOffset: ["-100%", "7%"],
             symbolPosition: "start",
@@ -165,14 +177,13 @@ export default {
             },
             z: 30, //图层值
             symbolRepeat: true,
-            data: [100, 100, 100, 100],
+            data: this.maxData,
             animationEasing: "elasticOut"
           },
-
           {
             name: "",
             type: "bar",
-            barWidth: "46%",
+            barWidth: "36%",
             silent: false,
             itemStyle: {
               color: {
@@ -195,8 +206,98 @@ export default {
               }
             },
             z: 20, //图层值
-            data: [60, 30, 52, 34]
+            data: this.barData
           }
+
+          // {
+          //   // 外边框
+          //   name: "",
+          //   type: "bar",
+          //   barGap: "-100%",
+          //   barWidth: "55%",
+          //   itemStyle: {
+          //     normal: {
+          //       //barBorderRadius: 1,
+          //       color: "#0c1830"
+          //     }
+          //   },
+          //   z: 1, //图层值
+          //   data: [10, 10, 10]
+          // },
+          // {
+          //   // 外边框
+          //   name: "",
+          //   type: "bar", //echarts图的类型
+          //   barGap: "-93%",
+          //   barWidth: "48%",
+          //   itemStyle: {
+          //     normal: {
+          //       //  barBorderRadius: 1,
+          //       color: {
+          //         type: "linear",
+          //         x: 0,
+          //         y: 0,
+          //         x2: 1,
+          //         y2: 0,
+          //         colorStops: [
+          //           {
+          //             offset: 0,
+          //             color: "#6a9ee9" // 0% 处的颜色
+          //           },
+          //           {
+          //             offset: 1,
+          //             color: "#f93c66" // 100% 处的颜色
+          //           }
+          //         ],
+          //         globalCoord: false // 缺省为 false
+          //       }
+          //     }
+          //   },
+          //   z: 2, //图层值
+          //   data: [2, 5, 8]
+          // },
+          // {
+          //   name: "",
+          //   type: "pictorialBar",
+          //   symbol: "rect",
+          //   barWidth: "50%",
+          //   barGap: "100%",
+          //   symbolSize: ["14%", "100%"],
+          //   symbolMargin: "200%",
+          //   symbolOffset: ["-100%", "0%"],
+          //   symbolPosition: "start",
+          //   symbolClip: true,
+          //   itemStyle: {
+          //     normal: {
+          //       //  barBorderRadius: 1,
+          //       color: "#0b253c"
+          //     }
+          //   },
+          //   z: 3, //图层值
+          //   symbolRepeat: true,
+          //   data: [2, 5, 8],
+          //   animationEasing: "elasticOut"
+          // },
+          // {
+          //   name: "",
+          //   type: "pictorialBar",
+          //   symbol: "rect",
+          //   barWidth: "45%",
+          //   symbolSize: ["50%", "100%"],
+          //   symbolMargin: "50%",
+          //   symbolOffset: ["-50%", "7%"],
+          //   symbolPosition: "start",
+          //   symbolClip: true,
+          //   itemStyle: {
+          //     normal: {
+          //       color: "#0b253c"
+          //     }
+          //   },
+          //   z: 1, //图层值
+          //   symbolRepeat: true,
+          //   data: [10, 10, 10],
+          //   animationEasing: "elasticOut"
+          // }
         ]
       });
       this.resizeCharts();

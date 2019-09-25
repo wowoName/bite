@@ -29,7 +29,7 @@
           :class="{activeTab:activeParkingLotType===index}"
           :key="index"
           class="tabs"
-          @click="changeParkingLot(index)"
+          @click="changeParkingLot(index,item)"
         >{{item}}</div>
       </div>
       <div class="home-left-content">
@@ -40,11 +40,11 @@
               <div class="left-top-left wisdom-border-1px">
                 <div class="pieCharts-item">
                   <!-- <charts-title name="利用率" /> -->
-                  <pie-charts title="利用率" />
+                  <pie-charts title="利用率" :data="utilizationPie" />
                 </div>
                 <div class="pieCharts-item">
                   <!-- <charts-title name="空置率" /> -->
-                  <pie-charts title="空置率" />
+                  <pie-charts title="空置率" :data="vacancyRatePie" />
                 </div>
               </div>
               <div class="left-top-right wisdom-4px wisdom-border-1px">
@@ -89,11 +89,34 @@
         <div class="content-right">
           <div class="content-right-top wisdom-map">
             <div class="content-right-top-scale wisdom-content-right-top-scale">
-               <div class="mask wisdom-mask"></div>
+              <div class="mask wisdom-mask"></div>
               <map-charts></map-charts>
             </div>
+            <!-- 控件 -->
+            <!-- <div class="mapControl">
+              <div class="mapControl-top"></div>
+              <div class="mapControl-bottom">
+                <div class="mapControl-bottom-left">
+                  <ul class="wisdom-ul">
+                    <li
+                      class="wisdom-li"
+                      v-for="v in 20"
+                      :key="v"
+                      :style="{top:v*5+'%'}"
+                      :class="{'max-li':v%2==0}"
+                    >
+                      <span class="wisdom-span">{{v%2==0?v:''}}</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mapControl-bottom-center">
+                  <el-slider v-model="sliderNum" :show-tooltip="false" :min="1" :max="17" vertical></el-slider>
+                </div>
+                <div class="mapControl-bottom-right"></div>
+              </div>
+            </div>-->
             <!-- <map-charts></map-charts> -->
-            <b-map />
+            <b-map :mapData="mapData" />
           </div>
           <div class="content-right-bottom">
             <line-charts
@@ -157,7 +180,7 @@
       <div class="right-bottom">
         <div class="bottom-item wisdom-right-bottom-hg">
           <wisdom-title title="今日订单信息" />
-          <TransBarCharts />
+          <TransBarCharts :data="todayOrderData" />
         </div>
 
         <div class="bottom-item wisdom-right-bottom-hg">
@@ -165,7 +188,7 @@
           <order-bar-charts :chartsObj="orderDataObj" />
         </div>
         <div class="bottom-item wisdom-right-bottom-hg">
-          <order-trans-bar-charts />
+          <order-trans-bar-charts :barData="orderDataObjBar" />
         </div>
       </div>
     </div>
@@ -220,6 +243,7 @@ export default {
       activeVehiclesNum: 584, //30天车辆活跃数
       todayOrderNum: 12547, //今日订单数
       velocity: 12, //周转率
+      sliderNum: 10, //地图zoom
       parkingLotData: [
         "全部停车场",
         "门前三包区域停车场",
@@ -246,9 +270,13 @@ export default {
      * 停车场类型切换
      * @param {Number} index  停车场类型缩影
      */
-    changeParkingLot(index) {
+    changeParkingLot(index, value) {
       if (this.activeParkingLotType == index) return;
       this.activeParkingLotType = index;
+      this.$message({
+        type: "success",
+        message: value
+      });
     },
     /**
      * 获取系统时间
@@ -287,7 +315,39 @@ export default {
   activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
 };
 </script>
-<style lang='scss' scoped>
+<style lang='scss' >
+.el-slider.is-vertical {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.el-slider.is-vertical .el-slider__runway {
+  width: 100% !important;
+  height: calc(100% - 5px);
+  margin: 5px 0 0 !important;
+  background-color: #37455f;
+}
+.el-slider.is-vertical .el-slider__bar {
+  width: 100% !important;
+  background-color: #37455f;
+}
+.el-slider__button {
+  width: 8px !important;
+  height: 1px !important;
+  border-radius: 0 !important;
+  background-color: #fdfeff;
+  border-color: #fdfeff;
+  margin-bottom: 8px;
+}
+.el-slider.is-vertical .el-slider__button-wrapper {
+  width: 100%;
+  left: -3px !important;
+}
+.el-slider__runway {
+  text-align: center;
+}
+
 $clearance: 4px;
 @mixin homeFlex($ai: center, $jc: center) {
   display: flex;
@@ -499,16 +559,83 @@ $clearance: 4px;
         height: 100%;
         @include homeFlex(center, space-between);
         flex-direction: column;
-        
+
         .wisdom-map {
           height: calc(70% - 4px);
-          padding:1px;
-          box-sizing:border-box;
+          padding: 1px;
+          box-sizing: border-box;
         }
         .content-right-top {
           width: 100%;
           @include homeBorder;
           position: relative;
+          .mapControl {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            width: 10px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            background-color: #0c1a25;
+            .mapControl-top {
+              width: 16px;
+              height: 16px;
+              background-color: #fff;
+              border-radius: 50%;
+            }
+            .mapControl-bottom {
+              width: 10px;
+              height: 60px;
+              margin-top: 2px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              flex-direction: row;
+              .mapControl-bottom-left {
+                height: 100%;
+                width: 2px;
+                .wisdom-ul {
+                  border-right: 1px solid #6ba2ef;
+                }
+                ul {
+                  height: 50px;
+                  width: 4px;
+                  padding-top: 5px;
+                  position: relative;
+                  .wisdom-li {
+                    height: 1px;
+                  }
+                  .max-li {
+                    width: 4px;
+                    height: 1px;
+                  }
+                  li {
+                    position: absolute;
+                    right: 0;
+                    width: 2px;
+                    height: 100%;
+                    padding: 0;
+                    background-color: #6ba2ef;
+                    position: relative;
+                    .wisdom-span {
+                      position: absolute;
+                      top: 0;
+                      left: -18px;
+                      font-size: 0.5px;
+                      color: #6ba2ef;
+                    }
+                  }
+                }
+              }
+              .mapControl-bottom-center {
+                width: 2px;
+                height: 100%;
+              }
+            }
+          }
           .wisdom-content-right-top-scale {
             border: 1px solid #020973;
             border-radius: 2px;
@@ -517,25 +644,25 @@ $clearance: 4px;
             position: absolute;
             top: 2px;
             left: 2px;
-            width:60px;
+            width: 60px;
             height: 60px;
             z-index: 10;
-            background-color:rgba(0,1,3,.5);
-           
-            .wisdom-mask{
-              border:1px solid rgb(179, 5, 6);
-              border-radius:2px;
-            }
-.mask{
-  position:absolute;
-  top:13px;
-  right:1px;
-  width:48px;
-height:40px;
-background-color:rgba(60,34,45,0.5);
+            background-color: rgba(0, 1, 3, 0.5);
 
-z-index:10
-}
+            .wisdom-mask {
+              border: 1px solid rgb(179, 5, 6);
+              border-radius: 2px;
+            }
+            .mask {
+              position: absolute;
+              top: 13px;
+              right: 1px;
+              width: 48px;
+              height: 40px;
+              background-color: rgba(60, 34, 45, 0.5);
+
+              z-index: 10;
+            }
           }
         }
         .content-right-bottom {

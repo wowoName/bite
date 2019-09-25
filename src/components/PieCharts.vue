@@ -11,6 +11,10 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    data: {
+      type: Number,
+      defalt: 0
     }
   },
   data() {
@@ -23,6 +27,14 @@ export default {
   mounted() {
     this.fontScale = document.documentElement.clientWidth / 1920;
     this.initChart();
+  },
+  watch: {
+    data: {
+      handler() {
+        this.initChart();
+      },
+      deep: true
+    }
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -46,37 +58,37 @@ export default {
             fontSize: 10
           }
         },
-         grid: {
+        grid: {
           //这个是用来设置echarts图标的位置和其他设置
-          left: '20%',
-          right: '20%',
-          bottom: '20%',
-          top:'20%',
-          containLabel: true 
+          left: "20%",
+          right: "20%",
+          bottom: "20%",
+          top: "20%",
+          containLabel: true
         },
-          xAxis: {
-        type: 'category',
-          axisLabel:{
-            show:false
-        },
-         axisLine: {
+        xAxis: {
+          type: "category",
+          axisLabel: {
+            show: false
+          },
+          axisLine: {
             show: false,
             lineStyle: {
               width: 2,
               color: "#535a68" //X轴样式
             }
           },
-        data: []
-    },
-    yAxis: {
-        type: 'value',
-        axisLabel:{
-            show:false
+          data: []
         },
-        axisTick:{
-            show:false
-        },
-         axisLine: {
+        yAxis: {
+          type: "value",
+          axisLabel: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
             show: false,
             lineStyle: {
               width: 2,
@@ -86,7 +98,7 @@ export default {
           splitLine: {
             show: false
           }
-    },
+        },
         tooltip: {
           show: false,
           trigger: "item",
@@ -101,7 +113,7 @@ export default {
           top: "center",
           zlevel: 11,
           style: {
-            text: "36.6%", //这是百分比
+            text: this.data + "%", //这是百分比
             textAlign: "center",
             fill: "#7e8fbe",
             fontSize: 18 * this.fontScale,
@@ -114,7 +126,7 @@ export default {
             type: "pie",
             radius: ["50%", "65%"],
             center: ["center", "center"],
-              zlevel: 10,
+            zlevel: 10,
             hoverAnimation: false,
             avoidLabelOverlap: false,
             label: {
@@ -129,13 +141,13 @@ export default {
             },
             data: [
               {
-                value: 20,//100 - n
+                value: 100 - this.data, //100 - n
                 itemStyle: {
                   color: "#1e2833"
                 }
               },
               {
-                value: 80,//真实 数据
+                value: this.data, //真实 数据
                 name: "",
                 itemStyle: {
                   color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -143,7 +155,7 @@ export default {
                       offset: 0,
                       color: "#f03f68"
                     },
-                      {
+                    {
                       offset: 0.5,
                       color: "#f03f68"
                     },
@@ -173,126 +185,125 @@ export default {
                   }
                 }
               }
-            
             ]
           },
-            {
-        type: 'pie',
-        zlevel: 11,
-        silent: true,
-        radius: ['70%', '73%'],
-        hoverAnimation: false,
-         itemStyle: {
-                  color: '#59729d'
-                },
-        label: {
-            normal: {
-                show: false
+          {
+            type: "pie",
+            zlevel: 11,
+            silent: true,
+            radius: ["70%", "73%"],
+            hoverAnimation: false,
+            itemStyle: {
+              color: "#59729d"
             },
-        },
-        labelLine: {
-            normal: {
+            label: {
+              normal: {
                 show: false
-            }
-        },
-        data:[1]
-    }, {
-        type: 'pie',
-        zlevel: 11,
-        silent: true,
-        radius: ['79%', '81%'],
-        hoverAnimation: false,
-      itemStyle: {
-                  color: '#20324a'
-                },
-        label: {
-            normal: {
-                show: false
+              }
             },
-        },
-        labelLine: {
-            normal: {
+            labelLine: {
+              normal: {
                 show: false
-            }
-        },
-        data:[1]
-    },
-    //  {
-    //         type: 'pie',
-    //         zlevel: 4,
-    //         silent: true,
-    //         radius: ['87%', '90%'],
-    //         label: {
-    //             normal: {
-    //                 show: false
-    //             },
-    //         },
-    //         labelLine: {
-    //             normal: {
-    //                 show: false
-    //             }
-    //         },
-    //         color:['#000','#2196F3'],
-    //         data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    //     },
-  
+              }
+            },
+            data: [1]
+          },
+          {
+            type: "pie",
+            zlevel: 11,
+            silent: true,
+            radius: ["79%", "81%"],
+            hoverAnimation: false,
+            itemStyle: {
+              color: "#20324a"
+            },
+            label: {
+              normal: {
+                show: false
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [1]
+          },
+          //  {
+          //         type: 'pie',
+          //         zlevel: 4,
+          //         silent: true,
+          //         radius: ['87%', '90%'],
+          //         label: {
+          //             normal: {
+          //                 show: false
+          //             },
+          //         },
+          //         labelLine: {
+          //             normal: {
+          //                 show: false
+          //             }
+          //         },
+          //         color:['#000','#2196F3'],
+          //         data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+          //     },
+
           {
             name: "",
-            type: 'gauge',
-            splitNumber:30, //刻度数量
+            type: "gauge",
+            splitNumber: 30, //刻度数量
             min: 0,
             max: 100,
-            radius: '85%', //图表尺寸
-            center: ['50%', '50%'],
+            radius: "85%", //图表尺寸
+            center: ["50%", "50%"],
             startAngle: 90,
             endAngle: -269.9999,
             axisLine: {
-                show: false,
-                lineStyle: {
-                    width: 0,
-                    shadowBlur: 0,
-                    color: [
-                        [1, '#565966']
-                    ]
-                }
+              show: false,
+              lineStyle: {
+                width: 0,
+                shadowBlur: 0,
+                color: [[1, "#565966"]]
+              }
             },
             axisTick: {
-                show: false,
-                lineStyle: {
-                    color: 'auto',
-                    width: 1
-                },
-                length: 20,
-                splitNumber: 5
+              show: false,
+              lineStyle: {
+                color: "auto",
+                width: 1
+              },
+              length: 20,
+              splitNumber: 5
             },
             splitLine: {
-                show: true,
-                length: 2,
-                lineStyle: {
-                    color: 'auto',
-                }
+              show: true,
+              length: 2,
+              lineStyle: {
+                color: "auto"
+              }
             },
             axisLabel: {
-                show: false
+              show: false
             },
-            pointer: { //仪表盘指针
-                show: 0,
+            pointer: {
+              //仪表盘指针
+              show: 0
             },
             detail: {
-                show: 0,
-            },
-        },
-       {
-        data: [0, 1],
-        symbol:'none',
-         lineStyle: {
+              show: 0
+            }
+          },
+          {
+            data: [0, 1],
+            symbol: "none",
+            lineStyle: {
               normal: {
                 width: 2,
                 color: "#16202b"
               }
             },
-        type: 'line'
-    }
+            type: "line"
+          }
         ]
       });
       this.resizeCharts();
