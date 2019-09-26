@@ -52,10 +52,10 @@ export default {
     },
     methods: {
         initChart() {
-            let myChart = (this.chart = echarts.init(this.$refs.myEchart));
+            this.myChart = (this.chart = echarts.init(this.$refs.myEchart));
 
             // 把配置和数据放这里
-            myChart.setOption({
+            this.myChart.setOption({
                 grid: {
                     //这个是用来设置echarts图标的位置和其他设置
                     left: 5 * this.fontScale,

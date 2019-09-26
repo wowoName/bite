@@ -61,10 +61,10 @@ export default {
     },
     methods: {
         initChart() {
-            let myChart = (this.chart = echarts.init(this.$refs.myEchart));
+            this.myChart = (this.chart = echarts.init(this.$refs.myEchart));
 
             // 把配置和数据放这里
-            myChart.setOption({
+            this.myChart.setOption({
                 grid: [
                     {
                         left: 5 * this.fontScale,

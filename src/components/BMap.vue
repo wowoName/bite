@@ -17,6 +17,11 @@ import "echarts/extension/bmap/bmap";
 //东港区边界数据
 import rizhaoBoundary from "@/assets/data/mapData";
 
+//东港区乡镇边界
+import {
+    villagesTowns, coordinates
+} from "@/assets/data/donggang";
+
 import resize from "@/mixin/chartsResize";
 export default {
     name: "pieCharts",
@@ -50,6 +55,7 @@ export default {
     },
     data() {
         return {
+            curPolygon: [],//当前地图绘制的分区 polygon
             chart: null,
             mapModel: null,
             mapImg1: require("../assets/img/bmapImg.png"), //诱导停车场图片
@@ -59,10 +65,12 @@ export default {
             mapInfoImg: require("../assets/img/mapInfo.png"),
             mapInfoImgArror: require("../assets/img/home-right.png"),
             markerClusterer: null, //聚合
-            markersArr: [] //聚合数据
+            markersArr: [],//聚合数据
+            fontScale: 1
         };
     },
     mounted() {
+        this.fontScale = document.documentElement.clientWidth / 1920;
         this.initChart();
     },
     beforeDestroy() {
@@ -236,12 +244,11 @@ export default {
             //   })
             // );
             //绘制东港区边界
-            this.drawBoundary("dg");
+            //this.drawBoundary(rizhaoBoundary['dg']);
             //乡镇边界
-            // this.drawBoundary("borderData1");
-            // this.drawBoundary("borderData2");
-            // this.drawBoundary("borderData3");
-
+            this.drawVillagesTowns();
+            //绘制区域名称
+            this.drawBoundaryName()
 
             //   //限制拖动范围
             //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
@@ -250,22 +257,55 @@ export default {
             // } catch (e) {
             //     alert(e);
             // }
+
+            this.mapModel.addEventListener("zoomend", () => {
+                let _zoom = this.mapModel.getZoom()
+                console.log(_zoom)
+                for (let i = 0; i < this.curPolygon.length; i++) {
+                    if (_zoom < 14)
+                        this.curPolygon[i].setFillOpacity(0.6)
+                    else
+                        this.curPolygon[i].setFillOpacity(0.2)
+
+                }
+            });
         },
         //绘制边界
-        drawBoundary(name) {
-            let boundryData = rizhaoBoundary[name];
+        drawBoundary(boundryData, color = '#0e97ff') {
             let count = boundryData.length;
             for (let i = 0; i < count; i++) {
                 let ply = new BMap.Polygon(boundryData[i], {
-                    strokeWeight: 4,
-                    strokeColor: "#0e97ff",
-                    fillColor: "#409eff",
-                    fillOpacity: 0.3
-                }); //建立多边形覆盖物
+                    strokeWeight: 3 * this.fontScale,
+                    strokeColor: "#406eb4",
+                    fillColor: color,
+                    fillOpacity: 0.6
+                });
+                //建立多边形覆盖物
+                this.curPolygon.push(ply);
                 this.mapModel.addOverlay(ply); //添加覆盖物
             }
         },
+        drawBoundaryName() {
+            for (let i = 0; i < coordinates.length; i++) {
+                let point = new BMap.Point(coordinates[i].lnglat[0], coordinates[i].lnglat[1]);
+                var label = new BMap.Label(coordinates[i].name, { offset: new BMap.Size(1, -1), position: point });
+                label.setStyle({
+                    color: "#fff",
+                    fontSize: "9px",
+                    backgroundColor: "0.05",
+                    border: "0",
+                    fontWeight: "bold"
+                });
+                this.mapModel.addOverlay(label);
+            }
 
+        },
+        //绘制乡镇边界
+        drawVillagesTowns() {
+            for (let i = 0; i < villagesTowns.length; i++) {
+                this.drawBoundary(villagesTowns[i].coordinates, villagesTowns[i].color)
+            }
+        },
         /**
          *  绘制停车场--生成聚合数据
          */
