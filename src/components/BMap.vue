@@ -276,7 +276,7 @@ export default {
             for (let i = 0; i < count; i++) {
                 let ply = new BMap.Polygon(boundryData[i], {
                     strokeWeight: 3 * this.fontScale,
-                    strokeColor: "#406eb4",
+                    strokeColor: color,//"#406eb4",
                     fillColor: color,
                     fillOpacity: 0.6
                 });
