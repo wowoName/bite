@@ -67,3 +67,7 @@ src
    ├─ Home - 副本.vue
    ├─ Home.vue                 //这里是主页以及其他数据存放地方
    └─ Slider.vue
+
+
+
+
