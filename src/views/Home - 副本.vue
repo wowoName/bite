@@ -92,6 +92,30 @@
               <div class="mask wisdom-mask"></div>
               <map-charts></map-charts>
             </div>
+            <!-- 控件 -->
+            <!-- <div class="mapControl">
+              <div class="mapControl-top"></div>
+              <div class="mapControl-bottom">
+                <div class="mapControl-bottom-left">
+                  <ul class="wisdom-ul">
+                    <li
+                      class="wisdom-li"
+                      v-for="v in 20"
+                      :key="v"
+                      :style="{top:v*5+'%'}"
+                      :class="{'max-li':v%2==0}"
+                    >
+                      <span class="wisdom-span">{{v%2==0?v:''}}</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mapControl-bottom-center">
+                  <el-slider v-model="sliderNum" :show-tooltip="false" :min="1" :max="17" vertical></el-slider>
+                </div>
+                <div class="mapControl-bottom-right"></div>
+              </div>
+            </div>-->
+            <!-- <map-charts></map-charts> -->
             <b-map :mapData="mapData" />
           </div>
           <div class="content-right-bottom">
@@ -673,29 +697,19 @@ $clearance: 4px;
           center / 100% 100%;
         .content {
           width: 100%;
-          height: 100%;
-          // height: 30px; //44px
-              display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    position: relative;
+          height: 34px; //44px
           .title {
-            position:absolute;
-            top:-2px;
-            left: 0;
             width: 100%;
-            height: 4px;
+            height: 3px;
             padding-right: 4px;
             text-align: center;
-            font-size: 5px;
+            font-size: 4px;
             color: #548cc2;
           }
           .amount {
+            height: 34px;
             width: 100%;
             @include homeFlex(center, center);
-            flex:1;
-            padding-top:5px;
             font-size: 14px;
             text-align: center;
             color: #f43b66;

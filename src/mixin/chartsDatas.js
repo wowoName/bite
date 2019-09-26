@@ -1,3 +1,4 @@
+import { getData } from '@/request/common'
 export default {
     data() {
         return {
