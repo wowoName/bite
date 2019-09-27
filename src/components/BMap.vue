@@ -60,6 +60,7 @@ export default {
             mapModel: null,
             mapImg1: require("../assets/img/bmapImg.png"), //诱导停车场图片
             mapImg: require("../assets/img/symbol.png"),
+
             parkingLotImg: require("../assets/img/parkingLotA.gif"), //停车场图片
             parkingLotImg1: require("../assets/img/parkinglotD.gif"),
             mapInfoImg: require("../assets/img/mapInfo.png"),
@@ -321,8 +322,10 @@ export default {
                 let _type = this.mapData[i].type;
                 let myIcon = new BMap.Icon(
                     _type == "parkingLot" ? this.parkingLotImg : this.mapImg,
-                    new BMap.Size(43, 43),
-                    {}
+                    new BMap.Size(50, 50),
+                    {
+
+                    }
                 );
                 let points = this.mapData[i].data;
                 for (let i = 0; i < points.length; i++) {
@@ -360,7 +363,11 @@ export default {
                 this.setIcon(
                     new BMap.Icon(
                         type == "parkingLot" ? _this.parkingLotImg1 : _this.mapImg1,
-                        new BMap.Size(43, 43)
+                        new BMap.Size(60, 60), {
+                        imageOffset: new BMap.Size(0, 0),// 图片相对视窗的偏移
+                        // imageSize: new BMap.Size(35, 35) // 引用图片实际大小
+                    }
+
                     )
                 );
             });
@@ -369,7 +376,7 @@ export default {
                 this.setIcon(
                     new BMap.Icon(
                         type == "parkingLot" ? _this.parkingLotImg : _this.mapImg,
-                        new BMap.Size(43, 43)
+                        new BMap.Size(50, 50)
                     )
                 );
             });

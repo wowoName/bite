@@ -475,9 +475,6 @@ $clearance: 4px;
                 @include homeFlex();
                 height: 50%;
                 width: 100%;
-                // background: url(../assets/img/pieCharts.png) no-repeat center
-                //   center / 85% auto;
-                // position: relative;
               }
             }
             .wisdom-4px {
