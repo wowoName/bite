@@ -78,7 +78,7 @@ export default {
                     top: this.titleTop ? "top" : "bottom",
                     textStyle: {
                         color: this.titleTop ? "#548cc2" : "#535a68",
-                        fontSize: this.titleTop ? 12 * this.fontScale : 14 * this.fontScale
+                        fontSize: this.titleTop ? 15 * this.fontScale : 15 * this.fontScale
                     }
                 },
                 grid: {
@@ -93,8 +93,8 @@ export default {
                 legend: {
                     // itemGap: -8,
                     data: this.chartsObj.legend,
-                    itemWidth: 16 * this.fontScale,
-                    itemHeight: 8 * this.fontScale,
+                    itemWidth: 18 * this.fontScale,
+                    itemHeight: 14 * this.fontScale,
                     textStyle: {
                         color: "#5f6272",
                         fontSize: 13 * this.fontScale

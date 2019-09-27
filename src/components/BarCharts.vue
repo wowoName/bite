@@ -81,15 +81,15 @@ export default {
                 title: {
                     left: "left",
                     text: this.title,
-                    top: -3,
+                    top: 0,
                     textStyle: {
                         color: "#548cc2",
-                        fontSize: 12 * this.fontScale
+                        fontSize: 15 * this.fontScale
                     }
                 },
                 grid: {
-                    top: 16,
-                    bottom: 16,
+                    top: "20%",
+                    bottom: "15%",
                     left: "8%",
                     right: "6%"
                 },
@@ -189,7 +189,7 @@ export default {
                         splitArea: {
                             show: true,
                             areaStyle: {
-                                color: ["rgba(250,250,250,0.0)", "rgba(250,250,250,0.05)"]
+                                color: ["rgba(250,250,250,0.0)", "#0c2944"]
                             }
                         }
                     }
@@ -205,9 +205,6 @@ export default {
                             color: "#bf375e",
                             width: 1
                         },
-                        // areaStyle: {
-                        //     color: "rgba(5,140,255, 0.2)"
-                        // },
                         //根据数据设置最大值的的smybol  以及最小值的symbol
                         data: this.getLineData
                     },
@@ -220,15 +217,15 @@ export default {
                             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                                 {
                                     offset: 0,
-                                    color: this.chartsObj.colors[0] //'#f23c64'
+                                    color: '#e53c68'
                                 },
                                 {
                                     offset: 0.5,
-                                    color: this.chartsObj.colors[0] //'#f23c64'
+                                    color: '#b176af'
                                 },
                                 {
                                     offset: 1,
-                                    color: this.chartsObj.colors[1] //'#9492d0'
+                                    color: '#9491d2'
                                 }
                             ])
                         },
@@ -241,7 +238,7 @@ export default {
                         symbol: "rect",
                         symbolRepeat: "fixed",
                         symbolClip: true,
-                        symbolSize: ["60%", "10%"],
+                        symbolSize: ["80%", "20%"],
                         symbolOffset: [0, 0],
                         symbolMargin: 2,
                         itemStyle: {

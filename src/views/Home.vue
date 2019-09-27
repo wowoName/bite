@@ -3,7 +3,7 @@
     <div class="home-left">
       <div class="home-left-top">
         <div class="logo">
-          <span class="logoName">日照智慧停车监控中心</span>
+          <span class="logoName">日照市智慧停车监管指挥中心</span>
           <span class="time">{{sysTime}}</span>
         </div>
         <div class="top-count">
@@ -71,7 +71,7 @@
             </div>
             <div class="wisdom-line"></div>
             <div class="left-bottom wisdom-left-content-h wisdom-border-1px">
-              <div class="home-float left-bottom-bg">
+              <div class="home-float left-bottom-bg ">
                 <div class="title">周转率</div>
                 <div class="amount">{{velocity | formatToPrice }}</div>
               </div>
@@ -79,7 +79,7 @@
                 <!-- <charts-title name="最近三十天周转率" /> -->
                 <bar-charts unit="/天" :chartsObj="thVelocityObj" title="最近三十天周转率" />
               </div>
-              <div class="home-float left-bottom-item">
+              <div class="home-float left-bottom-item ">
                 <!-- <charts-title name="最近十二个月周转率" /> -->
                 <bar-charts :chartsObj="mtVelocityObj" title="最近十二个月周转率" />
               </div>
@@ -354,7 +354,7 @@ $clearance: 4px;
   .wisdom-line {
     height: 0.02rem;
     width: 100%;
-    background-color: #19476a;
+    background-color: #162331;
   }
   .home-left {
     height: 100%;
@@ -371,14 +371,15 @@ $clearance: 4px;
           letter-spacing: 1px;
           text-indent: 1px;
           font-weight: 600;
-          font-size: 9.6px;
+          font-size: 11px;
           color: #fff;
+          font-family: "Noto Sans Chinese Medium"
         }
         .time {
           letter-spacing: 1px;
           text-indent: 1px;
           font-weight: 600;
-          font-family: "DS-Digital";
+          font-family: "Century Gothic";
           font-size: 6px;
           color: #6d7373;
         }
@@ -396,18 +397,17 @@ $clearance: 4px;
           flex-direction: row;
           height: 100%;
           img {
-            width: 11px;
-            height: 11px;
+            width: 12px;
+            height: 12px;
             margin-right: 3px;
           }
           .type {
             height: 16px;
-
             @include homeFlex(center, space-between);
             align-self: flex-start;
             flex-direction: column;
             .name {
-              font-size: 5px;
+              font-size: 6px;
               color: #6ba2ef;
               opacity: 0.74;
             }
@@ -415,7 +415,7 @@ $clearance: 4px;
               font-size: 8px;
               color: #fe2959;
               font-weight: 600;
-              font-family: "DS-Digital";
+              font-family: "Century Gothic";
             }
           }
         }
@@ -492,11 +492,11 @@ $clearance: 4px;
             }
           }
           .left-bottom {
-            width: 100%;
+            width:100%;
             @include homeFlex(center, space-between);
             flex-direction: column;
             .left-bottom-bg {
-              width: 100%;
+              width:153px;
               height: 30px;
               background: url(../assets/img/left-bottom-bg.png) no-repeat center
                 center / 90% 90%;
@@ -511,18 +511,19 @@ $clearance: 4px;
                 color: #548cc2;
               }
               .amount {
-                height: 13px;
+                height: 14px;
                 width: 100;
-                line-height: 13px;
+                line-height: 12px;
                 text-align: center;
-                font-size: 10px;
+                font-size: 8px;
                 color: #fe2959;
-                font-family: "DS-Digital";
+                font-family: "Century Gothic";
               }
             }
             .left-bottom-item {
               width: 100%;
-              height: calc((100% - 35px) / 2);
+              height: calc((100% - 32px) / 2);
+             
             }
           }
         }
@@ -610,28 +611,27 @@ $clearance: 4px;
             }
           }
           .wisdom-content-right-top-scale {
-            border: 1px solid #020973;
+            border: 0.02rem solid #020973;
             border-radius: 2px;
           }
           .content-right-top-scale {
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             z-index: 10;
             background-color: rgba(0, 1, 3, 0.5);
-
             .wisdom-mask {
               border: 1px solid rgb(179, 5, 6);
               border-radius: 2px;
             }
             .mask {
               position: absolute;
-              top: 13px;
-              right: 1px;
-              width: 48px;
-              height: 40px;
+              top: 15px;
+              right: 2px;
+              width: 62px;
+              height: 56px;
               background-color: rgba(60, 34, 45, 0.5);
 
               z-index: 10;
@@ -648,7 +648,7 @@ $clearance: 4px;
   .home-right {
     height: 100%;
     width: 25%;
-    padding: 4px;
+    padding: 6px;
     box-sizing: border-box;
     // @include homeFlex(center, space-between);
     @include homeBorder;
@@ -696,7 +696,7 @@ $clearance: 4px;
             font-size: 14px;
             text-align: center;
             color: #f43b66;
-            font-family: "DS-Digital";
+            font-family: "Century Gothic";
           }
         }
       }
@@ -748,7 +748,7 @@ $clearance: 4px;
             color: #6ba2ef;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-family: "DS-Digital";
+            font-family: "Century Gothic";
             .amount-unit {
               font-size: 6px;
             }
@@ -777,7 +777,7 @@ $clearance: 4px;
           .amount {
             font-size: 9px;
             color: #6ba2ef;
-            font-family: "DS-Digital";
+            font-family: "Century Gothic";
           }
         }
       }

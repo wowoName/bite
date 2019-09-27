@@ -56,7 +56,7 @@ export default {
         background-color: #4c86e6;
     }
     span {
-        font-size: 5px;
+        font-size: 6px;
         color: #548cc2;
     }
 }

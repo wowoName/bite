@@ -55,15 +55,15 @@ export default {
                     top: "top",
                     textStyle: {
                         color: "#548cc2",
-                        fontSize: 14 * this.fontScale
+                        fontSize: 15 * this.fontScale
                     }
                 },
                 grid: {
                     //这个是用来设置echarts图标的位置和其他设置
                     left: "20%",
                     right: "20%",
-                    bottom: "20%",
-                    top: "20%",
+                    bottom: "30%",
+                    top: "30%",
                     containLabel: true
                 },
                 xAxis: {
@@ -116,7 +116,7 @@ export default {
                         text: this.data + "%", //这是百分比
                         textAlign: "center",
                         fill: "#7e8fbe",
-                        fontSize: 18 * this.fontScale,
+                        fontSize: 21 * this.fontScale,
                         fontWeight: 600
                     }
                 },
@@ -124,7 +124,7 @@ export default {
                     {
                         name: "",
                         type: "pie",
-                        radius: ["50%", "65%"],
+                        radius: ["53%", "62%"],
                         center: ["center", "center"],
                         zlevel: 10,
                         hoverAnimation: false,
@@ -150,6 +150,45 @@ export default {
                                 value: this.data, //真实 数据
                                 name: "",
                                 itemStyle: {
+                                    color: "#1e2833"
+                                },
+                                labelLine: {
+                                    show: false,
+                                    length: 200,
+                                    length2: 100
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: "",
+                        type: "pie",
+                        radius: ["50%", "64%"],
+                        center: ["center", "center"],
+                        zlevel: 10,
+                        hoverAnimation: false,
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: [
+                            {
+                                value: 100 - this.data, //100 - n
+                                itemStyle: {
+                                    color: "transparent"
+                                }
+                            },
+                            {
+                                value: this.data, //真实 数据
+                                name: "",
+                                itemStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                         {
                                             offset: 0,
@@ -169,20 +208,6 @@ export default {
                                     show: false,
                                     length: 200,
                                     length2: 100
-                                },
-                                label: {
-                                    color: "rgba(255,255,255,.45)",
-                                    fontSize: 14 * this.fontScale,
-                                    show: false,
-                                    position: "outside",
-                                    formatter: "智慧停车",
-                                    rich: {
-                                        a: {
-                                            color: "#fff",
-                                            fontSize: 20,
-                                            lineHeight: 30
-                                        }
-                                    }
                                 }
                             }
                         ]
@@ -229,25 +254,6 @@ export default {
                         },
                         data: [1]
                     },
-                    //  {
-                    //         type: 'pie',
-                    //         zlevel: 4,
-                    //         silent: true,
-                    //         radius: ['87%', '90%'],
-                    //         label: {
-                    //             normal: {
-                    //                 show: false
-                    //             },
-                    //         },
-                    //         labelLine: {
-                    //             normal: {
-                    //                 show: false
-                    //             }
-                    //         },
-                    //         color:['#000','#2196F3'],
-                    //         data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-                    //     },
-
                     {
                         name: "",
                         type: "gauge",
@@ -297,7 +303,7 @@ export default {
                         symbol: "none",
                         lineStyle: {
                             normal: {
-                                width: 2,
+                                width: 1 * this.fontScale,
                                 color: "#455a7e"
                             }
                         },

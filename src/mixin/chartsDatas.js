@@ -218,6 +218,10 @@ export default {
                         lonlat: [119.26, 35.42]
                     }
                 ]
+            }, {
+                type: "heatMap",
+                name: "热力图数据",
+                data: []
             }]
 
 
@@ -236,7 +240,8 @@ export default {
         this.getVehicleData()
             //最近30天订单信息
         this.getOrderDataObj()
-
+            //地图数据
+        this.getMapData()
     },
     methods: {
         getRandomNum(count) {
@@ -245,6 +250,29 @@ export default {
                 _data.push(Math.floor(Math.random() * (600 - 0) + 0))
             }
             return _data;
+        },
+        //地图数据--热力图数据
+        getMapData() {
+            let data = []
+            for (let i = 0; i < 88; i++) {
+                let _lng = Math.random() * (119.5 - 119.1) + 119.1;
+                let _lat = Math.random() * (35.6 - 35.25) + 35.25;
+                let _num = Math.floor(Math.random() * (1000 - 1) + 1)
+
+                // data.push({
+                //         "lng": _lng,
+                //         "lat": _lat,
+                //         "value": _num
+                //     })
+                data.push([_lng, _lat, _num])
+            }
+
+            this.mapData[2].data = data
+
+            setTimeout(() => {
+                this.getMapData()
+            }, 2000)
+
         },
         //获取30天周转率数据
         getThVelocityObj() {

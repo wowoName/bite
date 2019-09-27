@@ -39,6 +39,11 @@ export default {
                         type: "parkingLot",
                         name: "停车场",
                         data: []
+                    },
+                    {
+                        type: "heatMap",
+                        name: "热力图数据",
+                        data: []
                     }
                 ];
             }
@@ -85,6 +90,7 @@ export default {
     methods: {
         initChart() {
             this.chart = echarts.init(this.$refs.myEchart);
+
             this.chart.setOption({
                 bmap: {
                     center: [119.3, 35.439282],
@@ -214,17 +220,48 @@ export default {
                         ]
                     }
                 },
-                series: []
+                visualMap: {
+                    show: false,
+                    top: 'top',
+                    seriesIndex: -0,
+                    calculable: true,
+                    inRange: {
+                        color: ['blue', 'blue', 'green', 'yellow', 'red']
+                    }
+                },
+                //添加热力图
+                series: [
+                    {
+                        type: 'heatmap',
+                        coordinateSystem: 'bmap',
+                        data: this.mapData[2].data,
+                        pointSize: 7,
+                        blurSize: 8
+                    }
+                ]
+
             });
+
+
             this.mapModel = this.chart
                 .getModel()
                 .getComponent("bmap")
                 .getBMap();
-            //设置地图相关属性
-            this.setMapPro();
-            //标注诱导停车场
             //标注停车场
             this.drawParkingLot(this.mapImg1);
+            //////////热力图/////////
+            // var heatmapOverlay = new BMapLib.HeatmapOverlay({
+            //     "radius": 10
+            // });
+            // this.mapModel.addOverlay(heatmapOverlay);
+            // heatmapOverlay.setDataSet({
+            //     data: this.mapData[2].data,
+            //     max: Math.max.apply(Math, this.mapData[2].data.map(v => { return v.count }))
+            // });
+
+            //////////////////////
+            //设置地图相关属性
+            this.setMapPro();
 
             this.resizeCharts();
             //地图点击事件
@@ -249,7 +286,7 @@ export default {
             //乡镇边界
             this.drawVillagesTowns();
             //绘制区域名称
-            this.drawBoundaryName()
+            //  this.drawBoundaryName()
 
             //   //限制拖动范围
             //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
@@ -261,7 +298,6 @@ export default {
 
             this.mapModel.addEventListener("zoomend", () => {
                 let _zoom = this.mapModel.getZoom()
-                console.log(_zoom)
                 for (let i = 0; i < this.curPolygon.length; i++) {
                     if (_zoom < 14)
                         this.curPolygon[i].setFillOpacity(0.6)
@@ -289,7 +325,8 @@ export default {
         drawBoundaryName() {
             for (let i = 0; i < coordinates.length; i++) {
                 let point = new BMap.Point(coordinates[i].lnglat[0], coordinates[i].lnglat[1]);
-                var label = new BMap.Label(coordinates[i].name, { offset: new BMap.Size(1, -1), position: point });
+                var label = new BMap.Label(coordinates[i].name, { offset: new BMap.Size(1, -1), position: point, zIndex: 1 });
+
                 label.setStyle({
                     color: "#fff",
                     fontSize: "9px",
@@ -317,21 +354,19 @@ export default {
 
             //清楚聚合
             this.clearMarkerClusterer();
-            //停车场坐标
-            for (let i = 0; i < this.mapData.length; i++) {
+            //停车场坐标 this.mapData.length
+            for (let i = 0; i < 2; i++) {
                 let _type = this.mapData[i].type;
                 let myIcon = new BMap.Icon(
                     _type == "parkingLot" ? this.parkingLotImg : this.mapImg,
-                    new BMap.Size(50, 50),
-                    {
-
-                    }
+                    new BMap.Size(50, 50), {}
                 );
                 let points = this.mapData[i].data;
                 for (let i = 0; i < points.length; i++) {
                     let _point = new BMap.Point(points[i].lonlat[0], points[i].lonlat[1]);
                     let marker = new BMap.Marker(_point, {
-                        icon: myIcon
+                        icon: myIcon,
+                        zIndex: 999
                     });
                     //添加标注点击事件
                     this.parkingLotClick(marker, _point, points[i], _type);
@@ -340,7 +375,7 @@ export default {
             }
 
             this.markerClusterer = new BMapLib.MarkerClusterer(this.mapModel, {
-                markers: this.markersArr
+                markers: this.markersArr,
             });
             //  this.mapModel.addOverlay(marker);
         },
