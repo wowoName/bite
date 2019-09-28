@@ -69,7 +69,9 @@
                 </div>
               </div>
             </div>
-            <div class="wisdom-line"></div>
+            <div class="left-line">
+              <div class="wisdom-left-line"></div>
+            </div>
             <div class="left-bottom wisdom-left-content-h wisdom-border-1px">
               <div class="home-float left-bottom-bg">
                 <div class="title">周转率</div>
@@ -211,7 +213,7 @@ export default {
   data() {
     return {
       sysTime: "", //系统时间
-      vehicles: 1548, //车辆数量
+      vehicles: 1628, //车辆数量
       berth: 5848, //泊位数量
       membersNum: 12548, //会员总数
       activeMembersNum: 1258, //30天会员活跃数
@@ -330,8 +332,8 @@ $clearance: 4px;
   align-items: $ai;
   justify-content: $jc;
 }
-@mixin homeBorder() {
-  background: url(../assets/img/border.png) no-repeat center center/ 100% 100%;
+@mixin homeBorder($url: url(../assets/img/border.png)) {
+  background: $url no-repeat center center/ 100% 100%;
 }
 
 .home {
@@ -360,12 +362,12 @@ $clearance: 4px;
     height: 100%;
     width: calc(75% - #{$clearance});
     .home-left-top {
-      height: 18px;
+      height: 11.11%;
       width: 100%;
       @include homeFlex(center, space-between);
       .logo {
         height: 100%;
-        @include homeFlex(flex-start, space-between);
+        @include homeFlex(flex-start, center);
         flex-direction: column;
         .logoName {
           letter-spacing: 1px;
@@ -387,35 +389,35 @@ $clearance: 4px;
       .top-count {
         height: 100%;
         box-sizing: border-box;
-        @include homeFlex(center, flex-end);
+        @include homeFlex(center, center);
         flex-direction: row;
         .type-margin {
           margin-right: 40px;
         }
         .statistical-type {
-          @include homeFlex(center, flex-end);
+          @include homeFlex(center, center);
           flex-direction: row;
           height: 100%;
           img {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             margin-right: 3px;
           }
           .type {
-            height: 16px;
-            @include homeFlex(center, space-between);
+            height: 100%;
+            @include homeFlex(flex-start, center);
             align-self: flex-start;
             flex-direction: column;
             .name {
-              font-size: 6px;
+              font-size: 2px;
               color: #6ba2ef;
               opacity: 0.74;
             }
             .count {
-              font-size: 8px;
+              font-size: 14px;
               color: #fe2959;
-              font-weight: 600;
-              font-family: "Century Gothic";
+              font-weight: "Regular";
+              font-family: Century-Gothic;
             }
           }
         }
@@ -427,7 +429,7 @@ $clearance: 4px;
       @include homeFlex(center, space-between);
       margin-top: 4px;
       border-radius: 1px;
-      background-color: #0c1a25;
+      background-color: #01060c;
       .tabs {
         height: 8px;
         border-radius: 1px;
@@ -447,7 +449,7 @@ $clearance: 4px;
 
     .home-left-content {
       width: 100%;
-      height: calc(100% - 32px);
+      height: calc(88.89% - 10px);
       @include homeFlex(center, space-between);
       padding-top: 2px;
       box-sizing: border-box;
@@ -462,11 +464,12 @@ $clearance: 4px;
           width: 100%;
           @include homeFlex(center, space-between);
           flex-direction: column;
-          .wisdom-left-content-h {
-            height: calc(50% - 4px);
-          }
+          // .wisdom-left-content-h {
+          //   height: calc(50% - 4px);
+          // }
           .left-top {
             width: 100%;
+            height: calc(50% - 4px);
             @include homeFlex(center, space-between);
             .left-top-left {
               width: 30%;
@@ -491,7 +494,19 @@ $clearance: 4px;
               }
             }
           }
+          .left-line {
+            height: 8px;
+            width: 100%;
+            @include homeFlex(center, center);
+            .wisdom-left-line {
+              width: 100%;
+              height: 1px;
+
+              background-color: #1f2c3a;
+            }
+          }
           .left-bottom {
+            height: calc(50% - 4px);
             width: 100%;
             @include homeFlex(center, space-between);
             flex-direction: column;
@@ -506,7 +521,7 @@ $clearance: 4px;
                 line-height: 12px;
                 padding-top: 3px;
                 text-align: center;
-                font-size: 0.01rem;
+                font-size: 2px;
                 color: #548cc2;
               }
               .amount {
@@ -521,7 +536,7 @@ $clearance: 4px;
             }
             .left-bottom-item {
               width: 100%;
-              height: calc((100% - 32px) / 2);
+              height: calc((100% - 39px) / 2);
             }
           }
         }
@@ -534,12 +549,13 @@ $clearance: 4px;
 
         .wisdom-map {
           height: calc(70% - 4px);
-          padding: 1px;
+          padding: 3px;
           box-sizing: border-box;
         }
         .content-right-top {
           width: 100%;
-          @include homeBorder;
+          @include homeBorder(url(../assets/img/mapBg.png));
+
           position: relative;
           .mapControl {
             position: absolute;
@@ -614,8 +630,8 @@ $clearance: 4px;
           }
           .content-right-top-scale {
             position: absolute;
-            top: 2px;
-            left: 2px;
+            top: 10px;
+            left: 10px;
             width: 80px;
             height: 80px;
             z-index: 10;
@@ -694,7 +710,7 @@ $clearance: 4px;
             font-size: 14px;
             text-align: center;
             color: #f43b66;
-            font-family: "Century Gothic";
+            font-family: Century-Gothic;
           }
         }
       }
@@ -731,8 +747,7 @@ $clearance: 4px;
           .type-name {
             padding-left: 3px;
             box-sizing: border-box;
-            font-size: 5.5px;
-            font-weight: 600;
+            font-size: 1px;
             color: #386096;
           }
           .wisdom-amount {
@@ -762,7 +777,7 @@ $clearance: 4px;
           .type-name {
             display: inline-block;
             margin-bottom: -4px;
-            font-size: 5px;
+            font-size: 2px;
             font-weight: 600;
             color: #6b7893;
           }

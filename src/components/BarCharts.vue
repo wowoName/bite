@@ -81,7 +81,7 @@ export default {
         title: {
           left: "left",
           text: this.title,
-          top: 0,
+          top: -5 * this.fontScale,
           textStyle: {
             color: "#548cc2",
             fontSize: 15 * this.fontScale,
@@ -89,8 +89,8 @@ export default {
           }
         },
         grid: {
-          top: "20%",
-          bottom: "15%",
+          top: 24 * this.fontScale,
+          bottom: "20%",
           left: "8%",
           right: "6%"
         },
@@ -174,7 +174,7 @@ export default {
             type: "value",
             min: 0,
             max: 100,
-            splitNumber: 29, //背景条数
+            splitNumber: 10, //背景条数
             splitLine: {
               show: false
             },
@@ -239,7 +239,7 @@ export default {
             symbol: "rect",
             symbolRepeat: "fixed",
             symbolClip: true,
-            symbolSize: ["51%", "20%"],
+            symbolSize: ["60%", "20%"],
             symbolOffset: [0, 0],
             symbolMargin: 2,
             itemStyle: {

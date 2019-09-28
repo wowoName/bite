@@ -1,7 +1,12 @@
+import '@babel/polyfill'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// import 'babel-polyfill'
+
+
+
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -11,7 +16,7 @@ Vue.use(ElementUI)
 import '@/assets/js/pxToRem'
 
 // import '@/assets/iconfont/iconfont.css'
-// import '@/assets/font/font.css'
+import '@/assets/font/font.css'
 Vue.config.productionTip = false
 
 

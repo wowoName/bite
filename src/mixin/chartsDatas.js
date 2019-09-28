@@ -247,31 +247,51 @@ export default {
         getRandomNum(count) {
             let _data = [];
             for (let i = 0; i < count; i++) {
-                _data.push(Math.floor(Math.random() * (600 - 0) + 0))
+                _data.push(Math.floor(Math.random() * (100 - 0) + 0))
             }
             return _data;
         },
         //地图数据--热力图数据
         getMapData() {
-            let data = []
+            let data = [],
+                data1 = [],
+                data2 = [];
             for (let i = 0; i < 88; i++) {
                 let _lng = Math.random() * (119.5 - 119.1) + 119.1;
                 let _lat = Math.random() * (35.6 - 35.25) + 35.25;
-                let _num = Math.floor(Math.random() * (1000 - 1) + 1)
+                let _num = Math.floor(Math.random() * (1000 - 10) + 10)
 
                 // data.push({
                 //         "lng": _lng,
                 //         "lat": _lat,
-                //         "value": _num
+                //         "count": _num
                 //     })
                 data.push([_lng, _lat, _num])
+
+                data1.push({
+                    parkignName: "停车场",
+                    berthNum: _num,
+                    freeBerth: _num - 1,
+                    lonlat: [_lng, _lat]
+                })
+
+                data2.push({
+                    parkignName: "停车场",
+                    berthNum: _num,
+                    freeBerth: _num - 1,
+                    lonlat: [_lng, _lat]
+                })
             }
+
+            // this.mapData[0].data = data1
+
+            // this.mapData[1].data = data2
 
             this.mapData[2].data = data
 
             setTimeout(() => {
                 this.getMapData()
-            }, 2000)
+            }, 10000)
 
         },
         //获取30天周转率数据

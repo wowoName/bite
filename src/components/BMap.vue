@@ -1,5 +1,5 @@
 <template>
-    <div class="charts" ref="myEchart"></div>
+  <div class="charts" ref="myEchart"></div>
 </template>
 
 <script>
@@ -18,441 +18,462 @@ import "echarts/extension/bmap/bmap";
 import rizhaoBoundary from "@/assets/data/mapData";
 
 //东港区乡镇边界
-import {
-    villagesTowns, coordinates
-} from "@/assets/data/donggang";
+import { villagesTowns, coordinates } from "@/assets/data/donggang";
 
 import resize from "@/mixin/chartsResize";
 export default {
-    name: "pieCharts",
-    props: {
-        mapData: {
-            type: Array,
-            default: () => {
-                return [
-                    {
-                        type: "inducedParking",
-                        name: "诱导停车场",
-                        data: []
-                    },
-                    {
-                        type: "parkingLot",
-                        name: "停车场",
-                        data: []
-                    },
-                    {
-                        type: "heatMap",
-                        name: "热力图数据",
-                        data: []
-                    }
-                ];
-            }
-        }
-    },
-    mixins: [resize],
-    watch: {
-        mapData: {
-            handler() {
-                this.initChart();
-            },
-            deep: true
-        }
-    },
-    data() {
-        return {
-            curPolygon: [],//当前地图绘制的分区 polygon
-            chart: null,
-            mapModel: null,
-            mapImg1: require("../assets/img/bmapImg.png"), //诱导停车场图片
-            mapImg: require("../assets/img/symbol.png"),
-
-            parkingLotImg: require("../assets/img/parkingLotA.gif"), //停车场图片
-            parkingLotImg1: require("../assets/img/parkinglotD.gif"),
-            mapInfoImg: require("../assets/img/mapInfo.png"),
-            mapInfoImgArror: require("../assets/img/home-right.png"),
-            markerClusterer: null, //聚合
-            markersArr: [],//聚合数据
-            fontScale: 1
-        };
-    },
-    mounted() {
-        this.fontScale = document.documentElement.clientWidth / 1920;
+  name: "pieCharts",
+  props: {
+    mapData: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            type: "inducedParking",
+            name: "诱导停车场",
+            data: []
+          },
+          {
+            type: "parkingLot",
+            name: "停车场",
+            data: []
+          },
+          {
+            type: "heatMap",
+            name: "热力图数据",
+            data: []
+          }
+        ];
+      }
+    }
+  },
+  mixins: [resize],
+  watch: {
+    mapData: {
+      handler() {
         this.initChart();
-    },
-    beforeDestroy() {
-        if (!this.chart) {
-            return;
+      },
+      deep: true
+    }
+  },
+  data() {
+    return {
+      curPolygon: [], //当前地图绘制的分区 polygon
+      chart: null,
+      mapModel: null,
+      mapImg1: require("../assets/img/bmapImg.png"), //诱导停车场图片
+      mapImg: require("../assets/img/symbol.png"),
+
+      parkingLotImg: require("../assets/img/parkingLotA.gif"), //停车场图片
+      parkingLotImg1: require("../assets/img/parkinglotD.gif"),
+      mapInfoImg: require("../assets/img/mapInfo.png"),
+      mapInfoImgArror: require("../assets/img/home-right.png"),
+      markerClusterer: null, //聚合
+      markersArr: [], //聚合数据
+      fontScale: 1
+    };
+  },
+  mounted() {
+    this.fontScale = document.documentElement.clientWidth / 1920;
+    this.initChart();
+  },
+  beforeDestroy() {
+    if (!this.chart) {
+      return;
+    }
+    this.chart.dispose();
+    this.chart = null;
+  },
+  computed: {},
+  methods: {
+    initChart() {
+      this.chart = echarts.init(this.$refs.myEchart);
+
+      this.chart.setOption({
+        bmap: {
+          center: [119.3, 35.439282],
+          zoom: 11,
+          roam: true, //地图是否可缩放
+          mapStyle: {
+            styleJson: [
+              {
+                featureType: "water",
+                elementType: "all",
+                stylers: {
+                  color: "#031628"
+                }
+              },
+              {
+                featureType: "land",
+                elementType: "geometry",
+                stylers: {
+                  color: "#000102"
+                }
+              },
+              {
+                featureType: "highway",
+                elementType: "all",
+                stylers: {
+                  visibility: "off"
+                }
+              },
+              {
+                featureType: "arterial",
+                elementType: "geometry.fill",
+                stylers: {
+                  color: "#000000"
+                }
+              },
+              {
+                featureType: "arterial",
+                elementType: "geometry.stroke",
+                stylers: {
+                  color: "#0b3d51"
+                }
+              },
+              {
+                featureType: "local",
+                elementType: "geometry",
+                stylers: {
+                  color: "#000000"
+                }
+              },
+              {
+                featureType: "railway",
+                elementType: "geometry.fill",
+                stylers: {
+                  color: "#000000"
+                }
+              },
+              {
+                featureType: "railway",
+                elementType: "geometry.stroke",
+                stylers: {
+                  color: "#08304b"
+                }
+              },
+              {
+                featureType: "subway",
+                elementType: "geometry",
+                stylers: {
+                  lightness: -70
+                }
+              },
+              {
+                featureType: "building",
+                elementType: "geometry.fill",
+                stylers: {
+                  color: "#000000"
+                }
+              },
+              {
+                featureType: "all",
+                elementType: "labels.text.fill",
+                stylers: {
+                  color: "#857f7f"
+                }
+              },
+              {
+                featureType: "all",
+                elementType: "labels.text.stroke",
+                stylers: {
+                  color: "#000000"
+                }
+              },
+              {
+                featureType: "building",
+                elementType: "geometry",
+                stylers: {
+                  color: "#022338"
+                }
+              },
+              {
+                featureType: "green",
+                elementType: "geometry",
+                stylers: {
+                  color: "#062032"
+                }
+              },
+              {
+                featureType: "boundary",
+                elementType: "all",
+                stylers: {
+                  color: "#465b6c"
+                }
+              },
+              {
+                featureType: "manmade",
+                elementType: "all",
+                stylers: {
+                  color: "#022338"
+                }
+              },
+              {
+                featureType: "label",
+                elementType: "all",
+                stylers: {
+                  visibility: "off"
+                }
+              }
+            ]
+          }
+        },
+        visualMap: {
+          show: false,
+          top: "top",
+          seriesIndex: -0,
+          calculable: true,
+          inRange: {
+            color: ["blue", "blue", "green", "yellow", "red"]
+          }
+        },
+        //添加热力图
+        series: [
+          //   {
+          //     type: "heatmap",
+          //     coordinateSystem: "bmap",
+          //     data: this.mapData[2].data,
+          //     pointSize: 5,
+          //     blurSize: 6
+          //   }
+        ]
+      });
+
+      this.mapModel = this.chart
+        .getModel()
+        .getComponent("bmap")
+        .getBMap();
+      //标注停车场
+      // 清除图层(每次重新调用需要清除上一个覆盖物图层)
+      this.mapModel.clearOverlays();
+      this.drawParkingLot(this.mapImg1);
+
+      // this.initHeatMap();
+      //////////热力图/////////
+      //   var heatmapOverlay = new BMapLib.HeatmapOverlay({
+      //     radius: 10
+      //   });
+      //   this.mapModel.addOverlay(heatmapOverlay);
+      //   heatmapOverlay.setDataSet({
+      //     data: this.mapData[2].data,
+      //     max: Math.max.apply(
+      //       Math,
+      //       this.mapData[2].data.map(v => {
+      //         return v.count;
+      //       })
+      //     )
+      //   });
+
+      //////////////////////
+      //设置地图相关属性
+      this.setMapPro();
+
+      this.resizeCharts();
+      //地图点击事件
+      this.mapModel.addEventListener("click", e => {
+        if (e.overlay == null) {
+          let ele = document.getElementById("mapInfo");
+          if (ele) ele.remove();
         }
-        this.chart.dispose();
-        this.chart = null;
+      });
     },
-    computed: {},
-    methods: {
-        initChart() {
-            this.chart = echarts.init(this.$refs.myEchart);
+    //热力图
+    initHeatMap() {
+      //   let heatmapOverlay = new BMapLib.HeatmapOverlay({
+      //     // 热力图的每个点的半径大小
+      //     radius: 10
+      //   });
+      //   // 添加热力覆盖物
+      //   this.mapModel.addOverlay(heatmapOverlay);
+      //   heatmapOverlay.setDataSet({ data: this.mapData[2].data, max: 100 });
+      //   // 显示热力图，隐藏为this.heatmapOverlay.hide();
+      //   heatmapOverlay.show();
+    },
+    //设置地图属性
+    setMapPro() {
+      //设置最下缩放等级
+      this.mapModel.setMinZoom(10);
+      // this.mapModel.addControl(
+      //   new BMap.NavigationControl({
+      //     anchor: BMAP_ANCHOR_TOP_RIGHT
+      //   })
+      // );
+      //绘制东港区边界
+      //this.drawBoundary(rizhaoBoundary['dg']);
+      //乡镇边界
+      this.drawVillagesTowns();
+      //绘制区域名称
+      //  this.drawBoundaryName()
 
-            this.chart.setOption({
-                bmap: {
-                    center: [119.3, 35.439282],
-                    zoom: 11,
-                    roam: true, //地图是否可缩放
-                    mapStyle: {
-                        styleJson: [
-                            {
-                                featureType: "water",
-                                elementType: "all",
-                                stylers: {
-                                    color: "#031628"
-                                }
-                            },
-                            {
-                                featureType: "land",
-                                elementType: "geometry",
-                                stylers: {
-                                    color: "#000102"
-                                }
-                            },
-                            {
-                                featureType: "highway",
-                                elementType: "all",
-                                stylers: {
-                                    visibility: "off"
-                                }
-                            },
-                            {
-                                featureType: "arterial",
-                                elementType: "geometry.fill",
-                                stylers: {
-                                    color: "#000000"
-                                }
-                            },
-                            {
-                                featureType: "arterial",
-                                elementType: "geometry.stroke",
-                                stylers: {
-                                    color: "#0b3d51"
-                                }
-                            },
-                            {
-                                featureType: "local",
-                                elementType: "geometry",
-                                stylers: {
-                                    color: "#000000"
-                                }
-                            },
-                            {
-                                featureType: "railway",
-                                elementType: "geometry.fill",
-                                stylers: {
-                                    color: "#000000"
-                                }
-                            },
-                            {
-                                featureType: "railway",
-                                elementType: "geometry.stroke",
-                                stylers: {
-                                    color: "#08304b"
-                                }
-                            },
-                            {
-                                featureType: "subway",
-                                elementType: "geometry",
-                                stylers: {
-                                    lightness: -70
-                                }
-                            },
-                            {
-                                featureType: "building",
-                                elementType: "geometry.fill",
-                                stylers: {
-                                    color: "#000000"
-                                }
-                            },
-                            {
-                                featureType: "all",
-                                elementType: "labels.text.fill",
-                                stylers: {
-                                    color: "#857f7f"
-                                }
-                            },
-                            {
-                                featureType: "all",
-                                elementType: "labels.text.stroke",
-                                stylers: {
-                                    color: "#000000"
-                                }
-                            },
-                            {
-                                featureType: "building",
-                                elementType: "geometry",
-                                stylers: {
-                                    color: "#022338"
-                                }
-                            },
-                            {
-                                featureType: "green",
-                                elementType: "geometry",
-                                stylers: {
-                                    color: "#062032"
-                                }
-                            },
-                            {
-                                featureType: "boundary",
-                                elementType: "all",
-                                stylers: {
-                                    color: "#465b6c"
-                                }
-                            },
-                            {
-                                featureType: "manmade",
-                                elementType: "all",
-                                stylers: {
-                                    color: "#022338"
-                                }
-                            },
-                            {
-                                featureType: "label",
-                                elementType: "all",
-                                stylers: {
-                                    visibility: "off"
-                                }
-                            }
-                        ]
-                    }
-                },
-                visualMap: {
-                    show: false,
-                    top: 'top',
-                    seriesIndex: -0,
-                    calculable: true,
-                    inRange: {
-                        color: ['blue', 'blue', 'green', 'yellow', 'red']
-                    }
-                },
-                //添加热力图
-                series: [
-                    {
-                        type: 'heatmap',
-                        coordinateSystem: 'bmap',
-                        data: this.mapData[2].data,
-                        pointSize: 7,
-                        blurSize: 8
-                    }
-                ]
+      //   //限制拖动范围
+      //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
+      // try {
+      //     BMapLib.AreaRestriction.setBounds(this.mapModel, b);
+      // } catch (e) {
+      //     alert(e);
+      // }
 
-            });
+      this.mapModel.addEventListener("zoomend", () => {
+        let _zoom = this.mapModel.getZoom();
+        for (let i = 0; i < this.curPolygon.length; i++) {
+          if (_zoom < 14) this.curPolygon[i].setFillOpacity(0.6);
+          else this.curPolygon[i].setFillOpacity(0.2);
+        }
+      });
+    },
+    //绘制边界
+    drawBoundary(boundryData, color = "#0e97ff") {
+      let count = boundryData.length;
+      for (let i = 0; i < count; i++) {
+        let ply = new BMap.Polygon(boundryData[i], {
+          strokeWeight: 3 * this.fontScale,
+          strokeColor: "#406eb4", //"#406eb4",
+          fillColor: color,
+          fillOpacity: 0.6
+        });
+        //建立多边形覆盖物
+        this.curPolygon.push(ply);
+        this.mapModel.addOverlay(ply); //添加覆盖物
+      }
+    },
+    drawBoundaryName() {
+      for (let i = 0; i < coordinates.length; i++) {
+        let point = new BMap.Point(
+          coordinates[i].lnglat[0],
+          coordinates[i].lnglat[1]
+        );
+        var label = new BMap.Label(coordinates[i].name, {
+          offset: new BMap.Size(1, -1),
+          position: point,
+          zIndex: 1
+        });
 
+        label.setStyle({
+          color: "#fff",
+          fontSize: "9px",
+          backgroundColor: "0.05",
+          border: "0",
+          fontWeight: "bold"
+        });
+        this.mapModel.addOverlay(label);
+      }
+    },
+    //绘制乡镇边界
+    drawVillagesTowns() {
+      for (let i = 0; i < villagesTowns.length; i++) {
+        this.drawBoundary(villagesTowns[i].coordinates, villagesTowns[i].color);
+      }
+    },
+    /**
+     *  绘制停车场--生成聚合数据
+     */
+    drawParkingLot() {
+      //切换时移除面板
+      let ele = document.getElementById("mapInfo");
+      if (ele) ele.remove();
 
-            this.mapModel = this.chart
-                .getModel()
-                .getComponent("bmap")
-                .getBMap();
-            //标注停车场
-            this.drawParkingLot(this.mapImg1);
-            //////////热力图/////////
-            // var heatmapOverlay = new BMapLib.HeatmapOverlay({
-            //     "radius": 10
-            // });
-            // this.mapModel.addOverlay(heatmapOverlay);
-            // heatmapOverlay.setDataSet({
-            //     data: this.mapData[2].data,
-            //     max: Math.max.apply(Math, this.mapData[2].data.map(v => { return v.count }))
-            // });
+      //清楚聚合
+      this.clearMarkerClusterer();
+      //停车场坐标 this.mapData.length
+      for (let i = 0; i < 2; i++) {
+        let _type = this.mapData[i].type;
+        let myIcon = new BMap.Icon(
+          _type == "parkingLot" ? this.parkingLotImg : this.mapImg,
+          new BMap.Size(50, 50),
+          {}
+        );
+        let points = this.mapData[i].data;
+        for (let i = 0; i < points.length; i++) {
+          let _point = new BMap.Point(points[i].lonlat[0], points[i].lonlat[1]);
+          let marker = new BMap.Marker(_point, {
+            icon: myIcon,
+            zIndex: 999
+          });
+          //添加标注点击事件
+          this.parkingLotClick(marker, _point, points[i], _type);
+          this.markersArr.push(marker);
+        }
+      }
 
-            //////////////////////
-            //设置地图相关属性
-            this.setMapPro();
+      this.markerClusterer = new BMapLib.MarkerClusterer(this.mapModel, {
+        markers: this.markersArr
+      });
+      //  this.mapModel.addOverlay(marker);
+    },
+    /**
+     * 停车场添加点击事件
+     * @param {*} marker 停车场marker
+     * @param {*} point 百度坐标
+     * @param {*} parkingLotInfo 停车场信息
+     * @param {*} type 停车场类型
+     */
+    parkingLotClick(marker, point, parkingLotInfo, type) {
+      let _this = this;
+      marker.addEventListener("click", e => {
+        this.showParingLotInfo(point, parkingLotInfo);
+      });
 
-            this.resizeCharts();
-            //地图点击事件
-            this.mapModel.addEventListener("click", e => {
-                if (e.overlay == null) {
-                    let ele = document.getElementById("mapInfo");
-                    if (ele) ele.remove();
-                }
-            });
-        },
-        //设置地图属性
-        setMapPro() {
-            //设置最下缩放等级
-            this.mapModel.setMinZoom(10);
-            // this.mapModel.addControl(
-            //   new BMap.NavigationControl({
-            //     anchor: BMAP_ANCHOR_TOP_RIGHT
-            //   })
-            // );
-            //绘制东港区边界
-            //this.drawBoundary(rizhaoBoundary['dg']);
-            //乡镇边界
-            this.drawVillagesTowns();
-            //绘制区域名称
-            //  this.drawBoundaryName()
-
-            //   //限制拖动范围
-            //   let b = new BMap.Bounds(new BMap.Point(118.955169,35.868739),new BMap.Point(119.750852,35.006747));
-            // try {
-            //     BMapLib.AreaRestriction.setBounds(this.mapModel, b);
-            // } catch (e) {
-            //     alert(e);
-            // }
-
-            this.mapModel.addEventListener("zoomend", () => {
-                let _zoom = this.mapModel.getZoom()
-                for (let i = 0; i < this.curPolygon.length; i++) {
-                    if (_zoom < 14)
-                        this.curPolygon[i].setFillOpacity(0.6)
-                    else
-                        this.curPolygon[i].setFillOpacity(0.2)
-
-                }
-            });
-        },
-        //绘制边界
-        drawBoundary(boundryData, color = '#0e97ff') {
-            let count = boundryData.length;
-            for (let i = 0; i < count; i++) {
-                let ply = new BMap.Polygon(boundryData[i], {
-                    strokeWeight: 3 * this.fontScale,
-                    strokeColor: color,//"#406eb4",
-                    fillColor: color,
-                    fillOpacity: 0.6
-                });
-                //建立多边形覆盖物
-                this.curPolygon.push(ply);
-                this.mapModel.addOverlay(ply); //添加覆盖物
+      //鼠标移动上事件
+      marker.addEventListener("mouseover", function() {
+        let img = type == "parkingLot" ? this.parkingLotImg : this.mapImg;
+        this.setIcon(
+          new BMap.Icon(
+            type == "parkingLot" ? _this.parkingLotImg1 : _this.mapImg1,
+            new BMap.Size(60, 60),
+            {
+              imageOffset: new BMap.Size(0, 0) // 图片相对视窗的偏移
+              // imageSize: new BMap.Size(35, 35) // 引用图片实际大小
             }
-        },
-        drawBoundaryName() {
-            for (let i = 0; i < coordinates.length; i++) {
-                let point = new BMap.Point(coordinates[i].lnglat[0], coordinates[i].lnglat[1]);
-                var label = new BMap.Label(coordinates[i].name, { offset: new BMap.Size(1, -1), position: point, zIndex: 1 });
+          )
+        );
+      });
 
-                label.setStyle({
-                    color: "#fff",
-                    fontSize: "9px",
-                    backgroundColor: "0.05",
-                    border: "0",
-                    fontWeight: "bold"
-                });
-                this.mapModel.addOverlay(label);
-            }
+      marker.addEventListener("mouseout", function() {
+        this.setIcon(
+          new BMap.Icon(
+            type == "parkingLot" ? _this.parkingLotImg : _this.mapImg,
+            new BMap.Size(50, 50)
+          )
+        );
+      });
+    },
 
-        },
-        //绘制乡镇边界
-        drawVillagesTowns() {
-            for (let i = 0; i < villagesTowns.length; i++) {
-                this.drawBoundary(villagesTowns[i].coordinates, villagesTowns[i].color)
-            }
-        },
-        /**
-         *  绘制停车场--生成聚合数据
-         */
-        drawParkingLot() {
-            //切换时移除面板
-            let ele = document.getElementById("mapInfo");
-            if (ele) ele.remove();
+    /**
+     * 点击停车场显示弹窗
+     * @param {*} point 百度坐标
+     * @param {String} color 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
+     * @param {*} parkingLotInfo 停车场信息
+     */
+    showParingLotInfo(
+      point,
+      parkingLotInfo = { parkignName: "停车场", berthNum: 100, freeBerth: 88 }
+    ) {
+      let ele = document.getElementById("mapInfo");
+      if (ele) ele.remove();
+      let _this = this;
+      /// 复杂的自定义覆盖物
+      function ComplexCustomOverlay(point, text, mouseoverText) {
+        this._point = point;
+        this._text = text;
+        this._overText = mouseoverText;
+      }
+      ComplexCustomOverlay.prototype = new BMap.Overlay();
+      ComplexCustomOverlay.prototype.initialize = function(map) {
+        this._map = map;
+        let div = (this._div = document.createElement("div"));
+        div.id = "mapInfo";
+        div.style.position = "absolute";
+        div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+        div.style.background = `url( ${_this.mapInfoImg} ) no-repeat center center / 100% 100%`;
+        div.style.color = "white";
+        div.style.width = "258px";
+        div.style.height = "147px";
+        div.style.whiteSpace = "nowrap";
+        div.style.MozUserSelect = "none";
+        div.style.fontSize = "12px";
 
-            //清楚聚合
-            this.clearMarkerClusterer();
-            //停车场坐标 this.mapData.length
-            for (let i = 0; i < 2; i++) {
-                let _type = this.mapData[i].type;
-                let myIcon = new BMap.Icon(
-                    _type == "parkingLot" ? this.parkingLotImg : this.mapImg,
-                    new BMap.Size(50, 50), {}
-                );
-                let points = this.mapData[i].data;
-                for (let i = 0; i < points.length; i++) {
-                    let _point = new BMap.Point(points[i].lonlat[0], points[i].lonlat[1]);
-                    let marker = new BMap.Marker(_point, {
-                        icon: myIcon,
-                        zIndex: 999
-                    });
-                    //添加标注点击事件
-                    this.parkingLotClick(marker, _point, points[i], _type);
-                    this.markersArr.push(marker);
-                }
-            }
-
-            this.markerClusterer = new BMapLib.MarkerClusterer(this.mapModel, {
-                markers: this.markersArr,
-            });
-            //  this.mapModel.addOverlay(marker);
-        },
-        /**
-         * 停车场添加点击事件
-         * @param {*} marker 停车场marker
-         * @param {*} point 百度坐标
-         * @param {*} parkingLotInfo 停车场信息
-         * @param {*} type 停车场类型
-         */
-        parkingLotClick(marker, point, parkingLotInfo, type) {
-            let _this = this;
-            marker.addEventListener("click", e => {
-                this.showParingLotInfo(point, parkingLotInfo);
-            });
-
-            //鼠标移动上事件
-            marker.addEventListener("mouseover", function () {
-                let img = type == "parkingLot" ? this.parkingLotImg : this.mapImg;
-                this.setIcon(
-                    new BMap.Icon(
-                        type == "parkingLot" ? _this.parkingLotImg1 : _this.mapImg1,
-                        new BMap.Size(60, 60), {
-                        imageOffset: new BMap.Size(0, 0),// 图片相对视窗的偏移
-                        // imageSize: new BMap.Size(35, 35) // 引用图片实际大小
-                    }
-
-                    )
-                );
-            });
-
-            marker.addEventListener("mouseout", function () {
-                this.setIcon(
-                    new BMap.Icon(
-                        type == "parkingLot" ? _this.parkingLotImg : _this.mapImg,
-                        new BMap.Size(50, 50)
-                    )
-                );
-            });
-        },
-
-        /**
-         * 点击停车场显示弹窗
-         * @param {*} point 百度坐标
-         * @param {String} color 边框指示箭头颜色  根据当前停车场的图片显示 红 黄：默认黄
-         * @param {*} parkingLotInfo 停车场信息
-         */
-        showParingLotInfo(
-            point,
-            parkingLotInfo = { parkignName: "停车场", berthNum: 100, freeBerth: 88 }
-        ) {
-            let ele = document.getElementById("mapInfo");
-            if (ele) ele.remove();
-            let _this = this;
-            /// 复杂的自定义覆盖物
-            function ComplexCustomOverlay(point, text, mouseoverText) {
-                this._point = point;
-                this._text = text;
-                this._overText = mouseoverText;
-            }
-            ComplexCustomOverlay.prototype = new BMap.Overlay();
-            ComplexCustomOverlay.prototype.initialize = function (map) {
-                this._map = map;
-                let div = (this._div = document.createElement("div"));
-                div.id = "mapInfo";
-                div.style.position = "absolute";
-                div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
-                div.style.background = `url( ${_this.mapInfoImg} ) no-repeat center center / 100% 100%`;
-                div.style.color = "white";
-                div.style.width = "258px";
-                div.style.height = "147px";
-                div.style.whiteSpace = "nowrap";
-                div.style.MozUserSelect = "none";
-                div.style.fontSize = "12px";
-
-                //绘制内容
-                let span = `
+        //绘制内容
+        let span = `
          <div  style='height:20px;text-align:right;line-height:20px;padding-right:13px;color:#2f7cf0'>${parkingLotInfo.parkignName}</div>
          
          <div style='display:flex;justify-content: space-between;align-items: center;flex-direction: column;padding:12px 25px;'>
@@ -476,43 +497,43 @@ export default {
 
           </div>
         `;
-                div.innerHTML = span;
+        div.innerHTML = span;
 
-                let arrow = document.createElement("div");
-                arrow.id = "mapInfoArrow";
-                arrow.style.cssText = `position:absolute;top:51px;left:-41px;width:41px;height:20px;background:transparent;
+        let arrow = document.createElement("div");
+        arrow.id = "mapInfoArrow";
+        arrow.style.cssText = `position:absolute;top:51px;left:-41px;width:41px;height:20px;background:transparent;
           border:1px dashed #4a5a74 ;border-top:none;border-right:none;;
          `;
-                div.appendChild(arrow);
+        div.appendChild(arrow);
 
-                map.getPanes().labelPane.appendChild(div);
-                return div;
-            };
-            ComplexCustomOverlay.prototype.draw = function () {
-                let map = this._map;
-                let pixel = map.pointToOverlayPixel(this._point);
-                this._div.style.left = pixel.x + 40 + "px"; //parseInt(this._arrow.style.left) + "px";
-                this._div.style.top = pixel.y - 40 + "px";
-            };
-            let txt = "日照停车",
-                mouseoverTxt = txt + " " + parseInt(Math.random() * 1000, 10) + "套";
+        map.getPanes().labelPane.appendChild(div);
+        return div;
+      };
+      ComplexCustomOverlay.prototype.draw = function() {
+        let map = this._map;
+        let pixel = map.pointToOverlayPixel(this._point);
+        this._div.style.left = pixel.x + 40 + "px"; //parseInt(this._arrow.style.left) + "px";
+        this._div.style.top = pixel.y - 40 + "px";
+      };
+      let txt = "日照停车",
+        mouseoverTxt = txt + " " + parseInt(Math.random() * 1000, 10) + "套";
 
-            let myCompOverlay = new ComplexCustomOverlay(point, "日照", mouseoverTxt);
-            this.mapModel.addOverlay(myCompOverlay);
-        },
-        //清空聚合标注
-        clearMarkerClusterer() {
-            if (!this.markerClusterer) return;
-            this.markerClusterer.clearMarkers();
-            this.markersArr = [];
-        }
+      let myCompOverlay = new ComplexCustomOverlay(point, "日照", mouseoverTxt);
+      this.mapModel.addOverlay(myCompOverlay);
+    },
+    //清空聚合标注
+    clearMarkerClusterer() {
+      if (!this.markerClusterer) return;
+      this.markerClusterer.clearMarkers();
+      this.markersArr = [];
     }
+  }
 };
 </script>
 
 <style lang='scss' scoped>
 .charts {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 </style>
