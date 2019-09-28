@@ -10,8 +10,8 @@ Vue.use(ElementUI)
 //px 转 rem
 import '@/assets/js/pxToRem'
 
-import '@/assets/iconfont/iconfont.css'
-import '@/assets/font/font.css'
+// import '@/assets/iconfont/iconfont.css'
+// import '@/assets/font/font.css'
 Vue.config.productionTip = false
 
 

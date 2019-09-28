@@ -71,7 +71,7 @@
             </div>
             <div class="wisdom-line"></div>
             <div class="left-bottom wisdom-left-content-h wisdom-border-1px">
-              <div class="home-float left-bottom-bg ">
+              <div class="home-float left-bottom-bg">
                 <div class="title">周转率</div>
                 <div class="amount">{{velocity | formatToPrice }}</div>
               </div>
@@ -79,7 +79,7 @@
                 <!-- <charts-title name="最近三十天周转率" /> -->
                 <bar-charts unit="/天" :chartsObj="thVelocityObj" title="最近三十天周转率" />
               </div>
-              <div class="home-float left-bottom-item ">
+              <div class="home-float left-bottom-item">
                 <!-- <charts-title name="最近十二个月周转率" /> -->
                 <bar-charts :chartsObj="mtVelocityObj" title="最近十二个月周转率" />
               </div>
@@ -349,7 +349,7 @@ $clearance: 4px;
     color: #fff;
   }
   .wisdom-border-1px {
-    border: solid 0.01rem #19476a;
+    border: solid 0.01rem #1f2c3a;
   }
   .wisdom-line {
     height: 0.02rem;
@@ -373,7 +373,7 @@ $clearance: 4px;
           font-weight: 600;
           font-size: 11px;
           color: #fff;
-          font-family: "Noto Sans Chinese Medium"
+          font-family: "Noto Sans Chinese Medium";
         }
         .time {
           letter-spacing: 1px;
@@ -492,11 +492,11 @@ $clearance: 4px;
             }
           }
           .left-bottom {
-            width:100%;
+            width: 100%;
             @include homeFlex(center, space-between);
             flex-direction: column;
             .left-bottom-bg {
-              width:153px;
+              width: 153px;
               height: 30px;
               background: url(../assets/img/left-bottom-bg.png) no-repeat center
                 center / 90% 90%;
@@ -506,8 +506,7 @@ $clearance: 4px;
                 line-height: 12px;
                 padding-top: 3px;
                 text-align: center;
-                font-size: 4px;
-                font-weight: 600;
+                font-size: 0.01rem;
                 color: #548cc2;
               }
               .amount {
@@ -523,7 +522,6 @@ $clearance: 4px;
             .left-bottom-item {
               width: 100%;
               height: calc((100% - 32px) / 2);
-             
             }
           }
         }
@@ -672,14 +670,14 @@ $clearance: 4px;
           width: 100%;
           height: 100%;
           // height: 30px; //44px
-              display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          position: relative;
           .title {
-            position:absolute;
-            top:-2px;
+            position: absolute;
+            top: -2px;
             left: 0;
             width: 100%;
             height: 4px;
@@ -691,8 +689,8 @@ $clearance: 4px;
           .amount {
             width: 100%;
             @include homeFlex(center, center);
-            flex:1;
-            padding-top:5px;
+            flex: 1;
+            padding-top: 5px;
             font-size: 14px;
             text-align: center;
             color: #f43b66;
