@@ -49,7 +49,7 @@
               </div>
               <div class="left-top-right wisdom-4px wisdom-border-1px">
                 <div class="home-float left-top-right-item">
-                  <echarts-title title="最近30天变化曲线" is-pie />
+                  <echarts-title title="近30天变化曲线" is-pie />
                   <line-charts
                     unit="/天"
                     is-left-line
@@ -59,7 +59,7 @@
                   />
                 </div>
                 <div class="home-float left-top-right-item">
-                  <echarts-title title="最近12个月变化曲线" is-pie />
+                  <echarts-title title="近12个月变化曲线" is-pie />
                   <line-charts
                     :chartsObj="mtChangeObj"
                     title-top
@@ -78,12 +78,12 @@
                 <div class="amount">{{velocity | formatToPrice }}</div>
               </div>
               <div class="home-float left-bottom-item">
-                <echarts-title title="最近三十天周转率" />
+                <echarts-title title="近三十天周转率" />
                 <!-- <charts-title name="最近三十天周转率" /> -->
                 <bar-charts unit="/天" :chartsObj="thVelocityObj" />
               </div>
               <div class="home-float left-bottom-item">
-                <echarts-title title="最近十二个月周转率" />
+                <echarts-title title="近十二个月周转率" />
                 <!-- <charts-title name="最近十二个月周转率" /> -->
                 <bar-charts :chartsObj="mtVelocityObj" />
               </div>
@@ -164,7 +164,7 @@
         </div>
 
         <div class="bottom-item wisdom-right-bottom-hg">
-          <wisdom-title title="最近30天订单信息" />
+          <wisdom-title title="近30天订单信息" />
           <order-bar-charts :chartsObj="orderDataObj" />
         </div>
         <div class="bottom-item wisdom-right-bottom-hg">
