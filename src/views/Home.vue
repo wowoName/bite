@@ -39,31 +39,31 @@
             <div class="left-top wisdom-left-content-h">
               <div class="left-top-left wisdom-border-1px">
                 <div class="pieCharts-item">
-                  <!-- <charts-title name="利用率" /> -->
-                  <pie-charts title="利用率" :data="utilizationPie" />
+                  <echarts-title title="利用率" is-pie />
+                  <pie-charts :data="utilizationPie" />
                 </div>
                 <div class="pieCharts-item">
-                  <!-- <charts-title name="空置率" /> -->
-                  <pie-charts title="空置率" :data="vacancyRatePie" />
+                  <echarts-title title="空置率" is-pie />
+                  <pie-charts :data="vacancyRatePie" />
                 </div>
               </div>
               <div class="left-top-right wisdom-4px wisdom-border-1px">
                 <div class="home-float left-top-right-item">
-                  <!-- <charts-title name="最近30天变化曲线" /> -->
+                  <echarts-title title="最近30天变化曲线" is-pie />
                   <line-charts
                     unit="/天"
+                    is-left-line
                     :chartsObj="thChangeObj"
-                    title="最近30天变化曲线"
                     title-top
                     :symbol-color="['#a61c3d','#548cc2']"
                   />
                 </div>
                 <div class="home-float left-top-right-item">
-                  <!-- <charts-title name="最近12个月变化曲线" /> -->
+                  <echarts-title title="最近12个月变化曲线" is-pie />
                   <line-charts
                     :chartsObj="mtChangeObj"
-                    title="最近12个月变化曲线"
                     title-top
+                    is-left-line
                     :symbol-color="['#a61c3d','#548cc2']"
                   />
                 </div>
@@ -78,12 +78,14 @@
                 <div class="amount">{{velocity | formatToPrice }}</div>
               </div>
               <div class="home-float left-bottom-item">
+                <echarts-title title="最近三十天周转率" />
                 <!-- <charts-title name="最近三十天周转率" /> -->
-                <bar-charts unit="/天" :chartsObj="thVelocityObj" title="最近三十天周转率" />
+                <bar-charts unit="/天" :chartsObj="thVelocityObj" />
               </div>
               <div class="home-float left-bottom-item">
+                <echarts-title title="最近十二个月周转率" />
                 <!-- <charts-title name="最近十二个月周转率" /> -->
-                <bar-charts :chartsObj="mtVelocityObj" title="最近十二个月周转率" />
+                <bar-charts :chartsObj="mtVelocityObj" />
               </div>
             </div>
           </div>
@@ -194,7 +196,8 @@ import BMap from "@/components/BMap";
 import AnimatedNumber from "animated-number-vue";
 //标题
 import WisdomTitle from "@/components/WisdomTitle";
-
+//ecahrts 标题
+import EchartsTitle from "@/components/EchartsTitle";
 //echarts 数据
 import chartsDataFn from "@/mixin/chartsDatas";
 export default {
@@ -206,6 +209,7 @@ export default {
     TransBarCharts,
     MapCharts,
     WisdomTitle,
+    EchartsTitle,
     BMap,
     OrderBarCharts,
     OrderTransBarCharts
@@ -478,6 +482,7 @@ $clearance: 4px;
                 @include homeFlex();
                 height: 50%;
                 width: 100%;
+                position: relative;
               }
             }
             .wisdom-4px {
@@ -491,6 +496,7 @@ $clearance: 4px;
                 @include homeFlex();
                 height: 50%;
                 width: 100%;
+                position: relative;
               }
             }
           }
@@ -537,6 +543,7 @@ $clearance: 4px;
             .left-bottom-item {
               width: 100%;
               height: calc((100% - 39px) / 2);
+              position: relative;
             }
           }
         }
@@ -757,7 +764,7 @@ $clearance: 4px;
           .amount {
             padding-left: 2px;
             box-sizing: border-box;
-            font-size: 12px;
+            font-size: 10px;
             color: #6ba2ef;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -788,7 +795,7 @@ $clearance: 4px;
             background: url(../assets/img/home-right.png) no-repeat left center;
           }
           .amount {
-            font-size: 9px;
+            font-size: 7px;
             color: #6ba2ef;
             font-family: "Century Gothic";
           }

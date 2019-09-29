@@ -41,6 +41,7 @@ export default {
   },
   mounted() {
     this.fontScale = document.documentElement.clientWidth / 1920;
+    this.chart = echarts.init(this.$refs.myEchart);
     this.initChart();
   },
   beforeDestroy() {
@@ -53,13 +54,12 @@ export default {
   computed: {},
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$refs.myEchart);
       // 把配置和数据放这里
       this.chart.setOption({
         grid: {
           top: "15%",
-          bottom: "10%",
-          left: "10%",
+          bottom: "15%",
+          left: "12%",
           right: "10%"
         },
         legend: {
@@ -131,6 +131,9 @@ export default {
             nameTextStyle: {
               color: "#ebf8ac"
             },
+            axisLine: {
+              show: false
+            },
             splitLine: {
               show: false
             },
@@ -139,8 +142,13 @@ export default {
             },
             axisLabel: {
               show: true,
-              color: "#535a68", //y轴文字颜色
-              fontSize: 12 * this.fontScale
+              margin: 35,
+              textStyle: {
+                color: "#535a68", //y轴文字颜色
+                fontSize: 12 * this.fontScale,
+                align: "left",
+                baseline: "middle"
+              }
             },
             splitLine: {
               show: true,

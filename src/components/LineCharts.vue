@@ -38,7 +38,8 @@ export default {
           legend: ["", ""]
         };
       }
-    }
+    },
+    IsLeftLine: Boolean
   },
   watch: {
     chartsObj: {
@@ -57,6 +58,7 @@ export default {
   mixins: [resize],
   mounted() {
     this.fontScale = document.documentElement.clientWidth / 1920;
+    this.myChart = this.chart = echarts.init(this.$refs.myEchart);
     this.initChart();
   },
   beforeDestroy() {
@@ -68,13 +70,12 @@ export default {
   },
   methods: {
     initChart() {
-      this.myChart = this.chart = echarts.init(this.$refs.myEchart);
       // 把配置和数据放这里
       this.myChart.setOption({
         backgroundColor: this.yname ? "#01060c" : "",
         title: {
           left: this.titleTop ? "left" : "center",
-          text: this.title,
+          text: "",
           top: this.titleTop ? "top" : "bottom",
           textStyle: {
             color: this.titleTop ? "#548cc2" : "#535a68",
@@ -86,8 +87,8 @@ export default {
           //这个是用来设置echarts图标的位置和其他设置
           left: 2,
           right: 20,
-          bottom: this.title == "" ? ' "8%"' : "10%",
-          top: "20%",
+          bottom: !this.IsLeftLine ? "13%" : "10%",
+          top: !this.IsLeftLine ? "20%" : "35%",
           containLabel: true //一般都带上这个，否则x,y轴的刻度值会被截取掉
         },
         color: ["#0962cb", "#fe2959"],

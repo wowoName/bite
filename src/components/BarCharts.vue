@@ -48,6 +48,7 @@ export default {
   },
   mounted() {
     this.fontScale = document.documentElement.clientWidth / 1920;
+    this.chart = echarts.init(this.$refs.myEchart);
     this.initChart();
   },
   beforeDestroy() {
@@ -75,13 +76,12 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$refs.myEchart);
       // 把配置和数据放这里
       this.chart.setOption({
         title: {
           left: "left",
           text: this.title,
-          top: -5 * this.fontScale,
+          top: -12 * this.fontScale,
           textStyle: {
             color: "#548cc2",
             fontSize: 15 * this.fontScale,
@@ -89,8 +89,8 @@ export default {
           }
         },
         grid: {
-          top: 24 * this.fontScale,
-          bottom: "20%",
+          top: 8,
+          bottom: 18 * this.fontScale,
           left: "8%",
           right: "6%"
         },

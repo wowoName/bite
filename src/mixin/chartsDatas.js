@@ -1,4 +1,11 @@
 import { getData } from '@/request/common'
+/**
+ * 
+ * getData().then(data=>{
+ *   do someThing
+ * })
+ * 
+ */
 export default {
     data() {
         return {
@@ -242,12 +249,15 @@ export default {
         this.getOrderDataObj()
             //地图数据
         this.getMapData()
+
+
+
     },
     methods: {
-        getRandomNum(count) {
+        getRandomNum(count, max = 100) {
             let _data = [];
             for (let i = 0; i < count; i++) {
-                _data.push(Math.floor(Math.random() * (100 - 0) + 0))
+                _data.push(Math.floor(Math.random() * (max - 0) + 0))
             }
             return _data;
         },
@@ -261,12 +271,12 @@ export default {
                 let _lat = Math.random() * (35.6 - 35.25) + 35.25;
                 let _num = Math.floor(Math.random() * (1000 - 10) + 10)
 
-                // data.push({
-                //         "lng": _lng,
-                //         "lat": _lat,
-                //         "count": _num
-                //     })
-                data.push([_lng, _lat, _num])
+                data.push({
+                        "lng": _lng,
+                        "lat": _lat,
+                        "count": _num
+                    })
+                    // data.push([_lng, _lat, _num])
 
                 data1.push({
                     parkignName: "停车场",
@@ -283,29 +293,38 @@ export default {
                 })
             }
 
-            // this.mapData[0].data = data1
+            this.mapData[0].data = data1.slice(0, 15)
 
-            // this.mapData[1].data = data2
+            this.mapData[1].data = data2.slice(0, 15)
 
             this.mapData[2].data = data
 
             setTimeout(() => {
                 this.getMapData()
-            }, 10000)
+            }, 2000)
 
         },
         //获取30天周转率数据
         getThVelocityObj() {
             this.thVelocityObj.data = this.getRandomNum(31);
+            setTimeout(() => {
+                this.getThVelocityObj()
+            }, 3000)
         },
         //获取12个月周转率数据
         getMtVelocityObj() {
             this.mtVelocityObj.data = this.getRandomNum(12);
+            setTimeout(() => {
+                this.getMtVelocityObj()
+            }, 4000)
         },
         //获取30天周转率数据
         getThChangeObj() {
             this.thChangeObj.blueData = this.getRandomNum(30);
             this.thChangeObj.redData = this.getRandomNum(30);
+            setTimeout(() => {
+                this.getThChangeObj()
+            }, 5000)
 
         },
         //获取12个月周转率数据
@@ -319,8 +338,8 @@ export default {
             this.vehicleDataObj.redData = this.getRandomNum(26);
         },
         getOrderDataObj() {
-            this.orderDataObj.lineData = this.getRandomNum(31);
-            this.orderDataObj.barData = this.getRandomNum(31);
+            this.orderDataObj.lineData = this.getRandomNum(31, 10000);
+            this.orderDataObj.barData = this.getRandomNum(31, 10000);
         },
     }
 }

@@ -51,7 +51,8 @@ export default {
   watch: {
     mapData: {
       handler() {
-        this.initChart();
+        if (this.mapModel) this.mapModel.clearOverlays();
+        this.markersAndHeatMap();
       },
       deep: true
     }
@@ -218,24 +219,24 @@ export default {
             ]
           }
         },
-        visualMap: {
-          show: false,
-          top: "top",
-          seriesIndex: -0,
-          calculable: true,
-          inRange: {
-            color: ["blue", "blue", "green", "yellow", "red"]
-          }
-        },
+        // visualMap: {
+        //   show: false,
+        //   top: "top",
+        //   seriesIndex: -0,
+        //   calculable: true,
+        //   inRange: {
+        //     color: ["blue", "blue", "green", "yellow", "red"]
+        //   }
+        // },
         //添加热力图
         series: [
-          //   {
-          //     type: "heatmap",
-          //     coordinateSystem: "bmap",
-          //     data: this.mapData[2].data,
-          //     pointSize: 5,
-          //     blurSize: 6
-          //   }
+          // {
+          //   type: "heatmap",
+          //   coordinateSystem: "bmap",
+          //   data: this.mapData[2].data,
+          //   pointSize: 8,
+          //   blurSize: 7
+          // }
         ]
       });
 
@@ -243,32 +244,11 @@ export default {
         .getModel()
         .getComponent("bmap")
         .getBMap();
-      //标注停车场
-      // 清除图层(每次重新调用需要清除上一个覆盖物图层)
-      this.mapModel.clearOverlays();
-      this.drawParkingLot(this.mapImg1);
-
-      // this.initHeatMap();
-      //////////热力图/////////
-      //   var heatmapOverlay = new BMapLib.HeatmapOverlay({
-      //     radius: 10
-      //   });
-      //   this.mapModel.addOverlay(heatmapOverlay);
-      //   heatmapOverlay.setDataSet({
-      //     data: this.mapData[2].data,
-      //     max: Math.max.apply(
-      //       Math,
-      //       this.mapData[2].data.map(v => {
-      //         return v.count;
-      //       })
-      //     )
-      //   });
-
-      //////////////////////
       //设置地图相关属性
       this.setMapPro();
 
-      this.resizeCharts();
+      this.markersAndHeatMap();
+      //this.resizeCharts();
       //地图点击事件
       this.mapModel.addEventListener("click", e => {
         if (e.overlay == null) {
@@ -277,17 +257,29 @@ export default {
         }
       });
     },
+    markersAndHeatMap() {
+      // 清除图层(每次重新调用需要清除上一个覆盖物图层
+      //热力图
+      this.initHeatMap();
+      //标注停车场
+      this.drawParkingLot(this.mapImg1);
+    },
     //热力图
     initHeatMap() {
-      //   let heatmapOverlay = new BMapLib.HeatmapOverlay({
-      //     // 热力图的每个点的半径大小
-      //     radius: 10
-      //   });
-      //   // 添加热力覆盖物
-      //   this.mapModel.addOverlay(heatmapOverlay);
-      //   heatmapOverlay.setDataSet({ data: this.mapData[2].data, max: 100 });
-      //   // 显示热力图，隐藏为this.heatmapOverlay.hide();
-      //   heatmapOverlay.show();
+      var heatmapOverlay = new BMapLib.HeatmapOverlay({
+        radius: 10
+      });
+      this.mapModel.addOverlay(heatmapOverlay);
+      heatmapOverlay.setDataSet({
+        data: this.mapData[2].data,
+        max: Math.max.apply(
+          Math,
+          this.mapData[2].data.map(v => {
+            return v.count;
+          })
+        )
+      });
+      heatmapOverlay.show();
     },
     //设置地图属性
     setMapPro() {
@@ -334,6 +326,7 @@ export default {
         //建立多边形覆盖物
         this.curPolygon.push(ply);
         this.mapModel.addOverlay(ply); //添加覆盖物
+        ply.disableMassClear();
       }
     },
     drawBoundaryName() {

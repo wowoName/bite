@@ -26,6 +26,7 @@ export default {
   mixins: [resize],
   mounted() {
     this.fontScale = document.documentElement.clientWidth / 1920;
+    this.myChart = this.chart = echarts.init(this.$refs.myEchart);
     this.initChart();
   },
   watch: {
@@ -45,8 +46,6 @@ export default {
   },
   methods: {
     initChart() {
-      this.myChart = this.chart = echarts.init(this.$refs.myEchart);
-
       // 把配置和数据放这里
       this.myChart.setOption({
         title: {
@@ -59,14 +58,7 @@ export default {
             fontWeight: 500
           }
         },
-        grid: {
-          //这个是用来设置echarts图标的位置和其他设置
-          left: "20%",
-          right: "20%",
-          bottom: "30%",
-          top: "30%",
-          containLabel: true
-        },
+
         xAxis: {
           type: "category",
           axisLabel: {
@@ -126,7 +118,7 @@ export default {
             name: "",
             type: "pie",
             radius: ["53%", "62%"],
-            center: ["center", "center"],
+            center: ["50%", "55%"],
             zlevel: 10,
             hoverAnimation: false,
             avoidLabelOverlap: false,
@@ -165,7 +157,7 @@ export default {
             name: "",
             type: "pie",
             radius: ["50%", "64%"],
-            center: ["center", "center"],
+            center: ["50%", "55%"],
             zlevel: 10,
             hoverAnimation: false,
             avoidLabelOverlap: false,
@@ -218,6 +210,7 @@ export default {
             zlevel: 11,
             silent: true,
             radius: ["70%", "73%"],
+            center: ["50%", "55%"],
             hoverAnimation: false,
             itemStyle: {
               color: "#59729d"
@@ -239,6 +232,7 @@ export default {
             zlevel: 11,
             silent: true,
             radius: ["79%", "81%"],
+            center: ["50%", "55%"],
             hoverAnimation: false,
             itemStyle: {
               color: "#20324a"
@@ -262,7 +256,7 @@ export default {
             min: 0,
             max: 100,
             radius: "85%", //图表尺寸
-            center: ["50%", "50%"],
+            center: ["50%", "55%"],
             startAngle: 90,
             endAngle: -269.9999,
             axisLine: {
