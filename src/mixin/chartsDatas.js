@@ -1,4 +1,4 @@
-import { getData } from '@/request/common'
+import { getData, queryTodayChangeDataInfo, queryStatData, queryMapPoint } from '@/request/common'
 /**
  * 
  * getData().then(data=>{
@@ -9,8 +9,8 @@ import { getData } from '@/request/common'
 export default {
     data() {
         return {
-            utilizationPie: 66.6, //饼状图 利用率 amx 100
-            vacancyRatePie: 88.8, //饼状图  空置率 100
+            utilizationPie: 0, //饼状图 利用率 amx 100
+            vacancyRatePie: 0, //饼状图  空置率 100
             thVelocityObj: { //30天周转率数据
                 data: [], //数据
                 xAxisData: [
@@ -43,8 +43,7 @@ export default {
                     "27",
                     "28",
                     "29",
-                    "30",
-                    "31"
+                    "30"
                 ], //x轴数据
                 colors: ["#f33b65", "#bb6ea4"] //柱状图渐变色
             },
@@ -98,8 +97,7 @@ export default {
                     "27",
                     "28",
                     "29",
-                    "30",
-                    "31"
+                    "30"
                 ]
             },
             mtChangeObj: { //最近12个月变化曲线
@@ -152,7 +150,7 @@ export default {
                     "24",
                 ]
             },
-            orderDataObjBar: [10, 8, 5], //最近三十天订单信息--横向柱状图
+            orderDataObjBar: [0, 0, 0], //最近三十天订单信息--横向柱状图
             orderDataObj: { //最近三十天订单数据
                 barData: [],
                 lineData: [],
@@ -186,8 +184,7 @@ export default {
                     "27",
                     "28",
                     "29",
-                    "30",
-                    "31"
+                    "30"
                 ]
             },
             todayOrderData: [1, 5, 6, 8], //今日订单数据 :"进行中", "欠费", "已缴费", "0元订单"
@@ -195,36 +192,11 @@ export default {
             mapData: [{
                 type: 'inducedParking',
                 name: "诱导停车场",
-                data: [{
-                        parkignName: "黑龙江停车场",
-                        berthNum: 333,
-                        freeBerth: 330,
-                        lonlat: [119.43, 35.34]
-                    },
-                    {
-                        parkignName: "A停车场",
-                        berthNum: 666,
-                        freeBerth: 660,
-                        lonlat: [119.44, 35.45]
-                    }
-
-                ]
+                data: []
             }, {
                 type: 'parkingLot',
                 name: "停车场",
-                data: [{
-                        parkignName: "B停车场",
-                        berthNum: 111,
-                        freeBerth: 110,
-                        lonlat: [119.55, 35.43]
-                    },
-                    {
-                        parkignName: "C停车场",
-                        berthNum: 222,
-                        freeBerth: 220,
-                        lonlat: [119.26, 35.42]
-                    }
-                ]
+                data: []
             }, {
                 type: "heatMap",
                 name: "热力图数据",
@@ -235,111 +207,112 @@ export default {
         }
     },
     mounted() {
-        //获取30天周转率数据
-        this.getThVelocityObj()
-            //12个月周转率数据
-        this.getMtVelocityObj()
-            //最近30天变化曲线
-        this.getMtChangeObj()
-            //最近12个月变化曲线
-        this.getThChangeObj()
-            //驶入驶离数据
-        this.getVehicleData()
-            //最近30天订单信息
-        this.getOrderDataObj()
-            //地图数据
-        this.getMapData()
+        //会员总数；30天活跃会员数；车辆总数；30天活跃车辆数
+        this.queryPlatformData()
+        this.queryTodayChangeDataInfo()
+        this.queryStatData()
 
-
+        this.queryMapPoint()
 
     },
     methods: {
-        getRandomNum(count, max = 100) {
-            let _data = [];
-            for (let i = 0; i < count; i++) {
-                _data.push(Math.floor(Math.random() * (max - 0) + 0))
-            }
-            return _data;
+        //会员总数；30天活跃会员数；车辆总数；30天活跃车辆数
+        queryPlatformData() {
+            getData().then(data => {
+                let _data = data.data.data;
+                this.membersNum = _data.leaguerTotal
+                this.activeMembersNum = _data.leaguerActiveTotal
+                this.vehiclesNum = _data.plateTotal
+                this.activeVehiclesNum = _data.plateActiveTotal
+            }).catch()
         },
-        //地图数据--热力图数据
-        getMapData() {
-            let data = [],
-                data1 = [],
-                data2 = [];
-            for (let i = 0; i < 88; i++) {
-                let _lng = Math.random() * (119.5 - 119.1) + 119.1;
-                let _lat = Math.random() * (35.6 - 35.25) + 35.25;
-                let _num = Math.floor(Math.random() * (1000 - 10) + 10)
+        queryTodayChangeDataInfo() {
+            queryTodayChangeDataInfo(this.activeParkingLotType).then(data => {
+                let _data = data.data.data;
+                this.todayOrderNum = _data.orderTotal
+                    //"进行中", "欠费", "已缴费", "0元订单"
+                this.todayOrderData = [_data.underway, _data.arrearage, _data.payFee, _data.zeroOrder]
 
-                data.push({
-                        "lng": _lng,
-                        "lat": _lat,
-                        "count": _num
-                    })
-                    // data.push([_lng, _lat, _num])
+                // 利用率 空置率
+                this.utilizationPie = _data.useRatio
+                this.vacancyRatePie = _data.vacancyRatio
+                    //周转率
+                this.velocity = _data.turnoverRatio
+                    //停车场数
+                this.vehicles = _data.parkTotal
+                    //泊位总数
+                this.berth = _data.spaceTotal
 
-                data1.push({
-                    parkignName: "停车场",
-                    berthNum: _num,
-                    freeBerth: _num - 1,
-                    lonlat: [_lng, _lat]
+            }).catch()
+        },
+        queryStatData() {
+            queryStatData(this.activeParkingLotType).then(data => {
+                let _data = data.data.data;
+                this.thVelocityObj.data = _data.turnoverRatio_30Days
+
+                this.mtVelocityObj.data = _data.turnoverRatio_12Months
+
+                //最近三十天变化曲线
+                this.thChangeObj.blueData = _data.useRatio_30Days
+                this.thChangeObj.redData = _data.vacancyRatio_30Days
+                    //最近12个月变化曲线
+                this.thChangeObj.blueData = _data.useRatio_12Months
+                this.thChangeObj.redData = _data.vacancyRatio_12Months
+
+                //
+                this.orderDataObjBar = [_data.zeroOrder, _data.payFee, _data.arrearage]
+
+            }).catch()
+        },
+        queryMapPoint() {
+            queryMapPoint().then(data => {
+                let _data = data.data.data;
+                //停车场基本数据格式
+                // {
+                //     parkignName: "B停车场",
+                //     berthNum: 111, 
+                //     freeBerth: 110,
+                //     lonlat: [119.55, 35.43]
+                // },
+                let inducedParking = _data.filter(v => {
+                    return v.pointType === 'induce'
+                }).map(v => {
+                    return {
+                        parkignName: "停车场",
+                        berthNum: '0',
+                        freeBerth: '0',
+                        lonlat: [v.posLong, v.posLat],
+                        pointId: v.pointId
+                    }
                 })
 
-                data2.push({
-                    parkignName: "停车场",
-                    berthNum: _num,
-                    freeBerth: _num - 1,
-                    lonlat: [_lng, _lat]
+                let parkingLot = _data.filter(v => {
+                    return v.pointType === 'park'
+                }).map(v => {
+                    return {
+                        parkignName: "停车场",
+                        berthNum: '0',
+                        freeBerth: '0',
+                        lonlat: [v.posLong, v.posLat],
+                        pointId: v.pointId
+                    }
                 })
-            }
+                this.mapData = [{
+                    type: 'inducedParking',
+                    name: "诱导停车场",
+                    data: inducedParking
+                }, {
+                    type: 'parkingLot',
+                    name: "停车场",
+                    data: parkingLot
+                }, {
+                    type: "heatMap",
+                    name: "热力图数据",
+                    data: []
+                }]
 
-            this.mapData[0].data = data1.slice(0, 15)
 
-            this.mapData[1].data = data2.slice(0, 15)
-
-            this.mapData[2].data = data
-
-            setTimeout(() => {
-                this.getMapData()
-            }, 2000)
-
-        },
-        //获取30天周转率数据
-        getThVelocityObj() {
-            this.thVelocityObj.data = this.getRandomNum(31);
-            setTimeout(() => {
-                this.getThVelocityObj()
-            }, 3000)
-        },
-        //获取12个月周转率数据
-        getMtVelocityObj() {
-            this.mtVelocityObj.data = this.getRandomNum(12);
-            setTimeout(() => {
-                this.getMtVelocityObj()
-            }, 4000)
-        },
-        //获取30天周转率数据
-        getThChangeObj() {
-            this.thChangeObj.blueData = this.getRandomNum(30);
-            this.thChangeObj.redData = this.getRandomNum(30);
-            setTimeout(() => {
-                this.getThChangeObj()
-            }, 5000)
-
-        },
-        //获取12个月周转率数据
-        getMtChangeObj() {
-            this.mtChangeObj.blueData = this.getRandomNum(30);
-            this.mtChangeObj.redData = this.getRandomNum(30);
-        },
-        //驶入驶离数据
-        getVehicleData() {
-            this.vehicleDataObj.blueData = this.getRandomNum(26);
-            this.vehicleDataObj.redData = this.getRandomNum(26);
-        },
-        getOrderDataObj() {
-            this.orderDataObj.lineData = this.getRandomNum(31, 10000);
-            this.orderDataObj.barData = this.getRandomNum(31, 10000);
-        },
+            }).catch()
+        }
     }
 }

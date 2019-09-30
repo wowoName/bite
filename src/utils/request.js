@@ -1,6 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
-import { Message } from 'element-ui'
+import { Message, Loading } from 'element-ui'
 let axiosToken = null
 axios.defaults.timeout = 3000;
 axios.defaults.headers = {
@@ -24,7 +24,7 @@ class HttpRequest {
         return new Promise((resolve, reject) => {
             axios.get(url, paramsData)
                 .then(function(res) {
-                    if (res.data.success == '10') {
+                    if (res.data.code == '1') {
                         Message({
                             showClose: true,
                             type: 'success',
@@ -43,6 +43,14 @@ class HttpRequest {
     // post请求
     post(url, paramsData) {
         return new Promise((resolve, reject) => {
+
+            const loading = Loading.service({
+                lock: true,
+                text: '数据加载中...',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+
             axios.post(url, qs.stringify(paramsData), {
                     //终止请求
                     cancelToken: new axios.CancelToken(function executor(c) {
@@ -50,7 +58,16 @@ class HttpRequest {
                     })
                 })
                 .then((res) => {
-                    resolve(res);
+                    loading.close();
+                    if (res.data.code == '1') {
+                        Message({
+                            showClose: true,
+                            type: 'success',
+                            message: '失败了'
+                        })
+                        reject('失败')
+                    } else
+                        resolve(res)
                 })
                 .catch((err) => {
                     reject('失败');

@@ -26,11 +26,11 @@
       <div class="home-left-tabs">
         <div
           v-for="(item,index) in parkingLotData"
-          :class="{activeTab:activeParkingLotType===index}"
+          :class="{activeTab:activeParkingLotType===item.type}"
           :key="index"
           class="tabs"
-          @click="changeParkingLot(index,item)"
-        >{{item}}</div>
+          @click="changeParkingLot(item.type)"
+        >{{item.name}}</div>
       </div>
       <div class="home-left-content">
         <div class="content-left">
@@ -217,26 +217,50 @@ export default {
   data() {
     return {
       sysTime: "", //系统时间
-      vehicles: 1628, //车辆数量
-      berth: 5848, //泊位数量
-      membersNum: 12548, //会员总数
-      activeMembersNum: 1258, //30天会员活跃数
-      vehiclesNum: 14582, //车辆总数
-      activeVehiclesNum: 584, //30天车辆活跃数
-      todayOrderNum: 12547, //今日订单数
-      velocity: 12, //周转率
-      sliderNum: 10, //地图zoom
+      vehicles: 0, //车辆数量
+      berth: 0, //泊位数量
+      membersNum: 0, //会员总数
+      activeMembersNum: 0, //30天会员活跃数
+      vehiclesNum: 0, //车辆总数
+      activeVehiclesNum: 0, //30天车辆活跃数
+      todayOrderNum: 0, //今日订单数
+      velocity: 0, //周转率
+      sliderNum: 0, //地图zoom
       parkingLotData: [
-        "全部停车场",
-        "门前三包区域停车场",
-        "公共停车场",
-        "社会停车场",
-        "景区停车场",
-        "收费停车场",
-        "停车场诱导",
-        "免费停车场"
+        {
+          name: "全部停车场",
+          type: ""
+        },
+        {
+          name: "门前三包区域停车场",
+          type: "A911"
+        },
+        {
+          name: "公共停车场",
+          type: "A912"
+        },
+        {
+          name: "社会停车场",
+          type: "A913"
+        },
+        {
+          name: "景区停车场",
+          type: "A914"
+        },
+        {
+          name: "收费停车场",
+          type: "A904"
+        },
+        {
+          name: "停车场诱导",
+          type: "A915"
+        },
+        {
+          name: "免费停车场",
+          type: "A903"
+        }
       ],
-      activeParkingLotType: 0 //当前停车场类型
+      activeParkingLotType: "" //当前停车场类型
     };
   },
   mixins: [chartsDataFn],
@@ -252,13 +276,9 @@ export default {
      * 停车场类型切换
      * @param {Number} index  停车场类型缩影
      */
-    changeParkingLot(index, value) {
-      if (this.activeParkingLotType == index) return;
-      this.activeParkingLotType = index;
-      this.$message({
-        type: "success",
-        message: value
-      });
+    changeParkingLot(value) {
+      if (this.activeParkingLotType == value) return;
+      this.activeParkingLotType = value;
     },
     /**
      * 获取系统时间
@@ -731,9 +751,9 @@ $clearance: 4px;
         flex-direction: column;
         > div {
           width: 100%;
-          height: 0.02rem;
+          height: 1px;
           border-radius: 3px;
-          background-color: #466898;
+          background-color: #1f2c3a;
         }
       }
       .right-top-item {

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { queryMapPointData } from "@/request/common";
 import echarts from "echarts";
 import "echarts/extension/bmap/bmap";
 
@@ -383,7 +384,13 @@ export default {
             zIndex: 999
           });
           //添加标注点击事件
-          this.parkingLotClick(marker, _point, points[i], _type);
+          this.parkingLotClick(
+            marker,
+            _point,
+            points[i],
+            _type,
+            this.mapData[i].pointId
+          );
           this.markersArr.push(marker);
         }
       }
@@ -399,11 +406,22 @@ export default {
      * @param {*} point 百度坐标
      * @param {*} parkingLotInfo 停车场信息
      * @param {*} type 停车场类型
+     * @param {*} pointId 停车场坐标点
      */
-    parkingLotClick(marker, point, parkingLotInfo, type) {
+    parkingLotClick(marker, point, parkingLotInfo, type, pointId) {
       let _this = this;
       marker.addEventListener("click", e => {
-        this.showParingLotInfo(point, parkingLotInfo);
+        queryMapPointData(pointId)
+          .then(data => {
+            let _data = data.data.data;
+            parkingLotInfo = {
+              parkignName: "停车场名称",
+              berthNum: _data.spaceTotal,
+              freeBerth: _data.residueSpaceTotal
+            };
+            this.showParingLotInfo(point, parkingLotInfo);
+          })
+          .catch();
       });
 
       //鼠标移动上事件
