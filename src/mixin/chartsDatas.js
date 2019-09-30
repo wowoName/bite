@@ -274,6 +274,9 @@ export default {
                 //     freeBerth: 110,
                 //     lonlat: [119.55, 35.43]
                 // },
+
+                //热力图数据 
+                // { "lng": "119.3", "lat": "35.439282", "count": "当前停车场 停车数" }
                 let inducedParking = _data.filter(v => {
                     return v.pointType === 'induce'
                 }).map(v => {
