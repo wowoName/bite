@@ -96,6 +96,7 @@
               <div class="mask wisdom-mask"></div>
               <map-charts></map-charts>
             </div>
+            <div class="wisdom-mapBg"></div>
             <b-map :mapData="mapData" />
           </div>
           <div class="content-right-bottom">
@@ -103,7 +104,7 @@
               :chartsObj="vehicleDataObj"
               lineDotted
               unit="/时"
-              yname="车辆/万辆"
+              yname="车辆/辆"
               title="24小时停车流量监控"
               :symbol-color="['#fff','#548cc2']"
             />
@@ -119,7 +120,7 @@
             <div class="type-name">会员总数</div>
             <div class="amount wisdom-amount">
               <span class="amount-num">{{membersNum | formatToPrice}}</span>
-              <span class="amount-unit">万</span>
+              <!-- <span class="amount-unit">万</span> -->
             </div>
           </div>
 
@@ -135,7 +136,7 @@
             <div class="type-name">车辆总数</div>
             <div class="amount wisdom-amount">
               <span class="amount-num">{{vehiclesNum | formatToPrice}}</span>
-              <span class="amount-unit">万</span>
+              <!-- <span class="amount-unit">万</span> -->
             </div>
           </div>
 
@@ -265,7 +266,14 @@ export default {
   },
   mixins: [chartsDataFn],
   computed: {},
-  watch: {},
+  watch: {
+    activeParkingLotType: {
+      handler: function() {
+        this.getAllChartsData();
+      },
+      deep: true
+    }
+  },
   filters: {
     formatToPrice: value => {
       return value.toString().replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
@@ -576,13 +584,13 @@ $clearance: 4px;
 
         .wisdom-map {
           height: calc(70% - 4px);
-          padding: 3px;
+          padding: 4px;
           box-sizing: border-box;
+          @include homeFlex(center, center);
         }
         .content-right-top {
           width: 100%;
-          @include homeBorder(url(../assets/img/mapBg.png));
-
+          //  @include homeBorder(url(../assets/img/mapBg.png));
           position: relative;
           .mapControl {
             position: absolute;
@@ -654,6 +662,15 @@ $clearance: 4px;
           .wisdom-content-right-top-scale {
             border: 0.02rem solid #020973;
             border-radius: 2px;
+          }
+          .wisdom-mapBg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(../assets/img/mapBg.png) no-repeat center center;
+            background-size: calc(100% - 2px) calc(100% - 2px);
           }
           .content-right-top-scale {
             position: absolute;

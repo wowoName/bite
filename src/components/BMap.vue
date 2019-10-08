@@ -415,7 +415,7 @@ export default {
           .then(data => {
             let _data = data.data.data;
             parkingLotInfo = {
-              parkignName: "停车场名称",
+              parkignName: "",
               berthNum: _data.spaceTotal,
               freeBerth: _data.residueSpaceTotal
             };

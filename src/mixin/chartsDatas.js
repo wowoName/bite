@@ -202,20 +202,20 @@ export default {
                 name: "热力图数据",
                 data: []
             }]
-
-
         }
     },
     mounted() {
-        //会员总数；30天活跃会员数；车辆总数；30天活跃车辆数
-        this.queryPlatformData()
-        this.queryTodayChangeDataInfo()
-        this.queryStatData()
+        this.getAllChartsData()
 
-        this.queryMapPoint()
 
     },
     methods: {
+        getAllChartsData() {
+            this.queryPlatformData()
+            this.queryTodayChangeDataInfo()
+            this.queryStatData()
+            this.queryMapPoint()
+        },
         //会员总数；30天活跃会员数；车辆总数；30天活跃车辆数
         queryPlatformData() {
             getData().then(data => {
@@ -264,7 +264,7 @@ export default {
 
             }).catch()
         },
-        queryMapPoint() {
+        queryMapPoint(youdao = true) {
             queryMapPoint().then(data => {
                 let _data = data.data.data;
                 //停车场基本数据格式

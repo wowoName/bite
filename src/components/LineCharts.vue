@@ -85,7 +85,7 @@ export default {
         },
         grid: {
           //这个是用来设置echarts图标的位置和其他设置
-          left: 2,
+          left: this.titleTop ? 1 : 20,
           right: 20,
           bottom: !this.IsLeftLine ? "13%" : "10%",
           top: !this.IsLeftLine ? "20%" : "35%",

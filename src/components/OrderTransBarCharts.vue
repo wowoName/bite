@@ -75,7 +75,7 @@ export default {
         tooltip: {
           trigger: "axis",
           formatter: params => {
-            return params[2].name + ":" + params[2].value * 10 + "万";
+            return params[2].name + ":" + params[2].value;
           },
           axisPointer: {
             animation: false
@@ -83,7 +83,7 @@ export default {
         },
         xAxis: {
           show: true,
-          name: "/十万", //x轴 单位
+          name: "", //x轴 单位
           nameLocation: "end",
           nameTextStyle: {
             color: "#535a68",

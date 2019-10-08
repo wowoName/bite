@@ -58,6 +58,12 @@ export default {
             fontWeight: 500
           }
         },
+        grid: {
+          top: "30%",
+          bottom: "20%",
+          left: "9.5%",
+          right: "9.5%"
+        },
 
         xAxis: {
           type: "category",
@@ -103,7 +109,7 @@ export default {
         graphic: {
           type: "text",
           left: "center",
-          top: "center",
+          top: "50%",
           zlevel: 11,
           style: {
             text: this.data + "%", //这是百分比
@@ -294,7 +300,7 @@ export default {
             }
           },
           {
-            data: [0, 1],
+            data: [0, 100],
             symbol: "none",
             lineStyle: {
               normal: {

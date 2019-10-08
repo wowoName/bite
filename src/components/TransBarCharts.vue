@@ -66,7 +66,7 @@ export default {
         tooltip: {
           trigger: "axis",
           formatter: params => {
-            return params[0].name + ":" + params[0].value + "万";
+            return params[0].name + ":" + params[0].value;
           },
           axisPointer: {
             animation: false
@@ -74,7 +74,7 @@ export default {
         },
         xAxis: {
           show: true,
-          name: "/万", //x轴 单位
+          name: "", //x轴 单位
           nameLocation: "end",
           nameTextStyle: {
             color: "#535a68",
