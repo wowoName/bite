@@ -44,12 +44,12 @@ class HttpRequest {
     post(url, paramsData) {
         return new Promise((resolve, reject) => {
 
-            const loading = Loading.service({
-                lock: true,
-                text: '数据加载中...',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
-            });
+            // const loading = Loading.service({
+            //     lock: true,
+            //     text: '数据加载中...',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)'
+            // });
 
             axios.post(url, qs.stringify(paramsData), {
                     //终止请求
@@ -58,13 +58,13 @@ class HttpRequest {
                     })
                 })
                 .then((res) => {
-                    loading.close();
+                    // loading.close();
                     if (res.data.code == '1') {
-                        Message({
-                            showClose: true,
-                            type: 'success',
-                            message: '失败了'
-                        })
+                        // Message({
+                        //     showClose: true,
+                        //     type: 'success',
+                        //     message: '失败了'
+                        // })
                         reject('失败')
                     } else
                         resolve(res)

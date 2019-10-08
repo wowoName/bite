@@ -229,37 +229,47 @@ export default {
         queryTodayChangeDataInfo() {
             queryTodayChangeDataInfo(this.activeParkingLotType).then(data => {
                 let _data = data.data.data;
-                this.todayOrderNum = _data.orderTotal
-                    //"进行中", "欠费", "已缴费", "0元订单"
+                //今日订单总数
+                this.todayOrderNum = _data.orderTotal;
+                // 今日订单信息  "进行中", "欠费", "已缴费", "0元订单"
                 this.todayOrderData = [_data.underway, _data.arrearage, _data.payFee, _data.zeroOrder]
 
-                // 利用率 空置率
+                // 泊位监控下   利用率 空置率
                 this.utilizationPie = _data.useRatio
                 this.vacancyRatePie = _data.vacancyRatio
-                    //周转率
+                    // 右侧 周转率
                 this.velocity = _data.turnoverRatio
-                    //停车场数
+                    // 顶部  停车数
                 this.vehicles = _data.parkTotal
-                    //泊位总数
+                    //  顶部 泊位总数
                 this.berth = _data.spaceTotal
+
+                //每小时 驶入  驶离 
+                this.vehicleDataObj.blueData = _data.driveInOrderStatOneDayList
+                this.vehicleDataObj.redData = _data.driveOutOrderStatOneDayList
+                    //x轴 数据不变 24小时
+                    //this.vehicleDataObj.xAxisData = []
+
+
 
             }).catch()
         },
         queryStatData() {
             queryStatData(this.activeParkingLotType).then(data => {
                 let _data = data.data.data;
+                //30天 周转率
                 this.thVelocityObj.data = _data.turnoverRatio_30Days
-
+                    //12个月周转率
                 this.mtVelocityObj.data = _data.turnoverRatio_12Months
 
-                //最近三十天变化曲线
+                //最近三十天变化曲线 
                 this.thChangeObj.blueData = _data.useRatio_30Days
                 this.thChangeObj.redData = _data.vacancyRatio_30Days
                     //最近12个月变化曲线
                 this.thChangeObj.blueData = _data.useRatio_12Months
                 this.thChangeObj.redData = _data.vacancyRatio_12Months
 
-                //
+                //近30天订单信息
                 this.orderDataObjBar = [_data.zeroOrder, _data.payFee, _data.arrearage]
 
             }).catch()
