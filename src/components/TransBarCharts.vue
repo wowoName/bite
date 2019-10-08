@@ -132,7 +132,7 @@ export default {
               margin: 35,
               textStyle: {
                 color: "#535a68", //y轴文字颜色
-                fontSize: 12 * this.fontScale,
+                fontSize: 13 * this.fontScale,
                 align: "left",
                 baseline: "middle"
               }
