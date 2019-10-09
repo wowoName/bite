@@ -133,7 +133,7 @@ export default {
 
                     axisLabel: {
                         show: true,
-                        margin: 40,
+                        margin: 50 * this.fontScale,
                         textStyle: {
                             color: "#535a68", //y轴文字颜色
                             fontSize: 13 * this.fontScale,

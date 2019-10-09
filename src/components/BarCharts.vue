@@ -90,7 +90,7 @@ export default {
                 },
                 grid: {
                     top: 8,
-                    bottom: 22,
+                    bottom: 25 * this.fontScale,
                     left: "8%",
                     right: "6%"
                 },

@@ -492,7 +492,7 @@ $clearance: 4px;
         padding: 2px;
         box-sizing: border-box;
         .left-contet-contet {
-          height: calc(100% - 14px);
+          height: calc(100% - 18px);
           width: 100%;
           @include homeFlex(center, space-between);
           flex-direction: column;
@@ -535,7 +535,6 @@ $clearance: 4px;
             .wisdom-left-line {
               width: 100%;
               height: 1px;
-
               background-color: #1f2c3a;
             }
           }
