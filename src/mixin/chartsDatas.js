@@ -266,11 +266,16 @@ export default {
                 this.thChangeObj.blueData = _data.useRatio_30Days
                 this.thChangeObj.redData = _data.vacancyRatio_30Days
                     //最近12个月变化曲线
-                this.thChangeObj.blueData = _data.useRatio_12Months
-                this.thChangeObj.redData = _data.vacancyRatio_12Months
+                this.mtChangeObj.blueData = _data.useRatio_12Months
+                this.mtChangeObj.redData = _data.vacancyRatio_12Months
 
                 //近30天订单信息
                 this.orderDataObjBar = [_data.zeroOrder, _data.payFee, _data.arrearage]
+
+                //近30天订单信息 --订单数  支付数
+                this.orderDataObj.barData = _data.orderNum_30DaysList
+                this.orderDataObj.lineData = _data.payNum_30DaysList
+
 
             }).catch()
         },

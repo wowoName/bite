@@ -275,7 +275,7 @@ export default {
     }
   },
   filters: {
-    formatToPrice: value => {
+    formatToPrice: (value=0) => {
       return value.toString().replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
     }
   },
@@ -468,7 +468,7 @@ $clearance: 4px;
         padding: 0 8px;
         text-align: center;
         font-size: 6px;
-        color: #6a6e6f;
+        color: #b6b9b9;
         transition: all 0.1s;
         cursor: pointer;
       }
