@@ -481,18 +481,18 @@ $clearance: 4px;
 
     .home-left-content {
       width: 100%;
-      height: calc(88.89% - 10px);
+      height: calc(88.89% - 14px);
       @include homeFlex(center, space-between);
       padding-top: 2px;
       box-sizing: border-box;
       .content-left {
         width: 35%;
-        height: 100%;
+        height:100%;
         @include homeBorder;
         padding: 2px;
         box-sizing: border-box;
         .left-contet-contet {
-          height: calc(100% - 18px);
+          height: calc(100% - 24px);
           width: 100%;
           @include homeFlex(center, space-between);
           flex-direction: column;
