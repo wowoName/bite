@@ -1,5 +1,5 @@
 <template>
-    <div class="charts" id="map" ref="myEchart"></div>
+    <div class="charts" ref="myEchart"></div>
 </template>
 
 <script>
@@ -22,6 +22,9 @@ import rizhaoBoundary from "@/assets/data/mapData";
 import { villagesTowns, coordinates } from "@/assets/data/donggang";
 
 import resize from "@/mixin/chartsResize";
+
+
+
 export default {
     name: "pieCharts",
     props: {
@@ -52,7 +55,7 @@ export default {
     watch: {
         mapData: {
             handler() {
-                // if (this.mapModel) this.mapModel.clearOverlays();
+                if (this.mapModel) this.mapModel.clearOverlays();
                 this.markersAndHeatMap();
             },
             deep: true
@@ -76,6 +79,7 @@ export default {
         };
     },
     mounted() {
+        this.fontScale = document.documentElement.clientWidth / 1920;
         this.initChart();
     },
     beforeDestroy() {
@@ -88,135 +92,165 @@ export default {
     computed: {},
     methods: {
         initChart() {
-            this.mapModel = new BMap.Map("map");
-            var point = new BMap.Point(119.463449, 35.427048);
-            this.mapModel.centerAndZoom(point, 11);
-            this.mapModel.enableScrollWheelZoom();
-            this.mapModel.setMapStyle({
-                styleJson: [
-                    {
-                        featureType: "water",
-                        elementType: "all",
-                        stylers: {
-                            color: "#031628"
-                        }
-                    },
-                    {
-                        featureType: "land",
-                        elementType: "geometry",
-                        stylers: {
-                            color: "#000102"
-                        }
-                    },
-                    {
-                        featureType: "highway",
-                        elementType: "all",
-                        stylers: {
-                            visibility: "off"
-                        }
-                    },
-                    {
-                        featureType: "arterial",
-                        elementType: "geometry.fill",
-                        stylers: {
-                            color: "#000000"
-                        }
-                    },
-                    {
-                        featureType: "arterial",
-                        elementType: "geometry.stroke",
-                        stylers: {
-                            color: "#0b3d51"
-                        }
-                    },
-                    {
-                        featureType: "local",
-                        elementType: "geometry",
-                        stylers: {
-                            color: "#000000"
-                        }
-                    },
-                    {
-                        featureType: "railway",
-                        elementType: "geometry.fill",
-                        stylers: {
-                            color: "#000000"
-                        }
-                    },
-                    {
-                        featureType: "railway",
-                        elementType: "geometry.stroke",
-                        stylers: {
-                            color: "#08304b"
-                        }
-                    },
-                    {
-                        featureType: "subway",
-                        elementType: "geometry",
-                        stylers: {
-                            lightness: -70
-                        }
-                    },
-                    {
-                        featureType: "building",
-                        elementType: "geometry.fill",
-                        stylers: {
-                            color: "#000000"
-                        }
-                    },
-                    {
-                        featureType: "all",
-                        elementType: "labels.text.fill",
-                        stylers: {
-                            color: "#857f7f"
-                        }
-                    },
-                    {
-                        featureType: "all",
-                        elementType: "labels.text.stroke",
-                        stylers: {
-                            color: "#000000"
-                        }
-                    },
-                    {
-                        featureType: "building",
-                        elementType: "geometry",
-                        stylers: {
-                            color: "#022338"
-                        }
-                    },
-                    {
-                        featureType: "green",
-                        elementType: "geometry",
-                        stylers: {
-                            color: "#062032"
-                        }
-                    },
-                    {
-                        featureType: "boundary",
-                        elementType: "all",
-                        stylers: {
-                            color: "#465b6c"
-                        }
-                    },
-                    {
-                        featureType: "manmade",
-                        elementType: "all",
-                        stylers: {
-                            color: "#022338"
-                        }
-                    },
-                    {
-                        featureType: "label",
-                        elementType: "all",
-                        stylers: {
-                            visibility: "off"
-                        }
+            this.chart = echarts.init(this.$refs.myEchart);
+
+            this.chart.setOption({
+                bmap: {
+                    center: [119.470923, 35.429401],
+                    zoom: 11,
+                    roam: true, //地图是否可缩放
+                    mapStyle: {
+                        styleJson: [
+                            {
+                                featureType: "water",
+                                elementType: "all",
+                                stylers: {
+                                    color: "#031628"
+                                }
+                            },
+                            {
+                                featureType: "land",
+                                elementType: "geometry",
+                                stylers: {
+                                    color: "#000102"
+                                }
+                            },
+                            {
+                                featureType: "highway",
+                                elementType: "all",
+                                stylers: {
+                                    visibility: "off"
+                                }
+                            },
+                            {
+                                featureType: "arterial",
+                                elementType: "geometry.fill",
+                                stylers: {
+                                    color: "#000000"
+                                }
+                            },
+                            {
+                                featureType: "arterial",
+                                elementType: "geometry.stroke",
+                                stylers: {
+                                    color: "#0b3d51"
+                                }
+                            },
+                            {
+                                featureType: "local",
+                                elementType: "geometry",
+                                stylers: {
+                                    color: "#000000"
+                                }
+                            },
+                            {
+                                featureType: "railway",
+                                elementType: "geometry.fill",
+                                stylers: {
+                                    color: "#000000"
+                                }
+                            },
+                            {
+                                featureType: "railway",
+                                elementType: "geometry.stroke",
+                                stylers: {
+                                    color: "#08304b"
+                                }
+                            },
+                            {
+                                featureType: "subway",
+                                elementType: "geometry",
+                                stylers: {
+                                    lightness: -70
+                                }
+                            },
+                            {
+                                featureType: "building",
+                                elementType: "geometry.fill",
+                                stylers: {
+                                    color: "#000000"
+                                }
+                            },
+                            {
+                                featureType: "all",
+                                elementType: "labels.text.fill",
+                                stylers: {
+                                    color: "#857f7f"
+                                }
+                            },
+                            {
+                                featureType: "all",
+                                elementType: "labels.text.stroke",
+                                stylers: {
+                                    color: "#000000"
+                                }
+                            },
+                            {
+                                featureType: "building",
+                                elementType: "geometry",
+                                stylers: {
+                                    color: "#022338"
+                                }
+                            },
+                            {
+                                featureType: "green",
+                                elementType: "geometry",
+                                stylers: {
+                                    color: "#062032"
+                                }
+                            },
+                            {
+                                featureType: "boundary",
+                                elementType: "all",
+                                stylers: {
+                                    color: "#465b6c"
+                                }
+                            },
+                            {
+                                featureType: "manmade",
+                                elementType: "all",
+                                stylers: {
+                                    color: "#022338"
+                                }
+                            },
+                            {
+                                featureType: "label",
+                                elementType: "all",
+                                stylers: {
+                                    visibility: "off"
+                                }
+                            }
+                        ]
                     }
+                },
+                // visualMap: {
+                //   show: false,
+                //   top: "top",
+                //   seriesIndex: -0,
+                //   calculable: true,
+                //   inRange: {
+                //     color: ["blue", "blue", "green", "yellow", "red"]
+                //   }
+                // },
+                //添加热力图
+                series: [
+                    // {
+                    //   type: "heatmap",
+                    //   coordinateSystem: "bmap",
+                    //   data: this.mapData[2].data,
+                    //   pointSize: 8,
+                    //   blurSize: 7
+                    // }
+
+
                 ]
             });
 
             this.$nextTick(() => {
+                this.mapModel = this.chart
+                    .getModel()
+                    .getComponent("bmap")
+                    .getBMap();
                 //设置地图相关属性
                 this.setMapPro();
 
@@ -267,7 +301,7 @@ export default {
             //乡镇边界
             this.drawVillagesTowns();
             //设置最下缩放等级
-            this.mapModel.setMinZoom(10);
+            // this.mapModel.setMinZoom(10);
             //绘制区域名称
             //  this.drawBoundaryName()
 
@@ -293,9 +327,10 @@ export default {
             for (let i = 0; i < count; i++) {
                 let ply = new BMap.Polygon(boundryData[i], {
                     strokeWeight: 3 * this.fontScale,
-                    strokeColor: "#4876FF", //"#406eb4",
+                    strokeColor: "#279dfb", //"#406eb4",
                     fillColor: color,
-                    fillOpacity: 0.6
+                    fillOpacity: 0.6,
+                    strokeStyle: 'solid' //边线的样式，solid  dashed
                 });
                 this.polygonEvent(ply, color)
                 //建立多边形覆盖物
@@ -305,26 +340,16 @@ export default {
             }
         },
         polygonEvent(polygon, color) {
-            // let that = this;
-            // polygon.addEventListener('click', function (e) {
-            //     //停车场弹窗 取消
-            //     let ele = document.getElementById("mapInfo");
-            //     if (ele) ele.remove();
-            //     //其余polygon 填充色还原
-            //     for (let i = 0; i < that.curPolygon.length; i++) {
-            //         if (that.curPolygon[i] !== this)
-            //             that.curPolygon[i].setFillColor(color)
-            //     }
-            //     let _color = this.getFillColor()
-            //     _color = _color == '#2656b9' ? color : "#2656b9";
-            //     this.setFillColor(_color)
+            polygon.addEventListener('click', function (e) {
+                let _color = this.getFillColor()
+                debugger
+                _color == '#2656b9' ? color : "#2656b9";
+                this.setFillColor(_color)
+            })
+
+            // polygon.addEventListener('mouseout', function (e) {
+            //     this.setFillColor(color)
             // })
-            polygon.addEventListener('mouseover', function (e) {
-                this.setFillColor('#2656b9')
-            })
-            polygon.addEventListener('mouseout', function (e) {
-                this.setFillColor(color)
-            })
         },
         drawBoundaryName() {
             for (let i = 0; i < coordinates.length; i++) {
@@ -353,8 +378,6 @@ export default {
             for (let i = 0; i < villagesTowns.length; i++) {
                 this.drawBoundary(villagesTowns[i].coordinates, villagesTowns[i].color);
             }
-
-            this.mapModel.setMinZoom(10);
         },
         /**
          *  绘制停车场--生成聚合数据
@@ -364,7 +387,7 @@ export default {
             let ele = document.getElementById("mapInfo");
             if (ele) ele.remove();
 
-            //清楚聚合
+            //清除聚合
             this.clearMarkerClusterer();
             //停车场坐标 this.mapData.length
             for (let i = 0; i < 2; i++) {
@@ -413,7 +436,7 @@ export default {
                     .then(data => {
                         let _data = data.data.data;
                         parkingLotInfo = {
-                            parkignName: "",
+                            parkignName: _data.parkName || "",
                             berthNum: _data.spaceTotal,
                             freeBerth: _data.residueSpaceTotal
                         };
@@ -544,6 +567,5 @@ export default {
 .charts {
     width: 100%;
     height: 100%;
-    background-color: transparent !important;
 }
 </style>

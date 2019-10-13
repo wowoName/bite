@@ -87,7 +87,7 @@ export default {
                     //这个是用来设置echarts图标的位置和其他设置
                     left: 4,// this.titleTop ? 1 : 20,
                     right: 20,
-                    bottom: !this.IsLeftLine ? "13%" : "10%",
+                    bottom: !this.IsLeftLine ? 26 * this.fontScale : "10%",
                     top: !this.IsLeftLine ? "20%" : "35%",
                     containLabel: true //一般都带上这个，否则x,y轴的刻度值会被截取掉
                 },

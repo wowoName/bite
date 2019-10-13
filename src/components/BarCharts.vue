@@ -12,6 +12,10 @@ export default {
             type: String,
             default: ""
         },
+        toolTip: {
+            type: String,
+            default: ""
+        },
         chartsObj: {
             type: Object,
             default: () => {
@@ -97,7 +101,7 @@ export default {
                 tooltip: {
                     trigger: "axis",
                     show: true,
-                    formatter: "{b0}: {c0}",
+                    formatter: this.toolTip + `({b0}${this.unit}): {c0}`,
                     axisPointer: {
                         type: "shadow",
                         label: {}
@@ -239,7 +243,7 @@ export default {
                         symbol: "rect",
                         symbolRepeat: "fixed",
                         symbolClip: true,
-                        symbolSize: ["60%", "20%"],
+                        symbolSize: ["80%", "20%"],
                         symbolOffset: [0, 0],
                         symbolMargin: 2,
                         itemStyle: {

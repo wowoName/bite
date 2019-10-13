@@ -96,7 +96,7 @@ export default {
                 xAxisData: [ //x轴数据
                 ]
             },
-            todayOrderData: [1, 5, 6, 8], //今日订单数据 :"进行中", "欠费", "已缴费", "0元订单"
+            todayOrderData: [0, 0, 0, 0], //今日订单数据 :"进行中", "欠费", "已缴费", "0元订单"
             //地图数据
             mapData: [{
                 type: 'inducedParking',
@@ -121,7 +121,7 @@ export default {
     methods: {
         timeForMat() {
             let data = [];
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 30; i++) {
                 data.push(this.beforeDay(i))
             }
             return data

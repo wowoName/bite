@@ -67,7 +67,7 @@ export default {
                     {
                         left: "-10%",
                         right: "-5%",
-                        bottom: "0%",
+                        bottom: 0,
                         top: "20%",
                         containLabel: true //一般都带上这个，否则x,y轴的刻度值会被截取掉
                     }

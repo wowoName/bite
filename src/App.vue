@@ -1,25 +1,25 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+    <div id="app">
+        <router-view />
+    </div>
 </template>
 
 <style lang="scss">
 .anchorBL {
-  display: none;
+    display: none;
 }
 #app {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
 
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    overflow: hidden;
 }
 article,
 aside,
@@ -32,25 +32,25 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
-  box-sizing: border-box;
+    display: block;
+    box-sizing: border-box;
 }
 /* html {
     font-size: 625%;
   } */
 
 * {
-  margin: 0;
-  padding: 0;
-  outline: none;
-  box-sizing: border-box;
-  user-select: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+    user-select: none;
 }
 
 body {
-  margin: 0;
-  color: #fff;
-  font-family: Century-Gothic, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    color: #fff;
+    font-family: Century-Gothic, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 ul,
@@ -66,38 +66,42 @@ h3,
 h4,
 h5,
 h6 {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
 }
 
 ol,
 ul {
-  list-style: none;
+    list-style: none;
 }
 
 blockquote,
 q {
-  quotes: none;
+    quotes: none;
 }
 
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
-  content: none;
+    content: "";
+    content: none;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 a,
 a:hover {
-  text-decoration: none;
+    text-decoration: none;
+}
+
+.ec-extension-bmap {
+    background-color: transparent !important;
 }
 </style>
