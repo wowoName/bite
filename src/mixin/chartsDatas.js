@@ -1,4 +1,4 @@
-import { getData, queryTodayChangeDataInfo, queryStatData, queryMapPoint } from '@/request/common'
+import { getData, queryTodayChangeDataInfo, queryStatData, queryMapPoint, getStatDateList} from '@/request/common'
 /**
  * 
  * getData().then(data=>{
@@ -115,63 +115,14 @@ export default {
     },
     mounted() {
         this.getAllChartsData()
-
-
-    },
+	},
     methods: {
-        timeForMat() {
-            let data = [];
-            for (let i = 0; i < 30; i++) {
-                data.push(this.beforeDay(i))
-            }
-            return data
-        },
-        beforeDay(day) {
-            let dd = new Date();
-            dd.setDate(dd.getDate() + day); //获取AddDayCount天后的日期
-            let y = dd.getFullYear();
-            let m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1); //获取当前月份的日期，不足10补0
-            let d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(); //获取当前几号，不足10补0
-            return d //y + "-" + m + "-" +
-        },
-        beforeMoth() {
-            let data = [],
-                _date = new Date(),
-                year = _date.getFullYear(),
-                month = _date.getMonth() + 1,
-                day = _date.getDate();
-
-
-            for (let i = 0; i < 12; i++) {
-                month--;
-                if (month === 0) month = 12
-                let _m = month
-                if (_m < 10) _m = '0' + _m
-                data.push(_m)
-            }
-            return data
-        },
-        getPreMonthDay(beginYearMonth, monthNum) {
-            var strYear = parseInt(beginYearMonth.substr(0, 4), 10);
-            var strMonth = parseInt(beginYearMonth.substr(4, 6), 10);
-            if (strMonth - 1 == 0) {
-                strYear -= 1;
-                strMonth = 12;
-            } else {
-                strMonth -= 1;
-            }
-            if (strMonth < 10) {
-                strMonth = "0" + strMonth;
-            }
-
-            var monthstr = strYear + "" + strMonth;
-            return monthstr;
-        },
         getAllChartsData() {
             this.queryPlatformData()
             this.queryTodayChangeDataInfo()
             this.queryStatData()
             this.queryMapPoint()
+			this.getStatDateList()
         },
         //会员总数；30天活跃会员数；车辆总数；30天活跃车辆数
         queryPlatformData() {
@@ -214,31 +165,23 @@ export default {
         queryStatData() {
             queryStatData(this.activeParkingLotType).then(data => {
                 let _data = data.data.data;
-                let days = this.timeForMat() //最近三十天
-                let month = this.beforeMoth();
 
                 //30天 周转率
                 this.thVelocityObj.data = _data.turnoverRatio_30Days
-                this.thVelocityObj.xAxisData = days
                     //12个月周转率
                 this.mtVelocityObj.data = _data.turnoverRatio_12Months
-                this.mtVelocityObj.xAxisData = month
                     //最近三十天变化曲线 
                 this.thChangeObj.blueData = _data.useRatio_30Days
                 this.thChangeObj.redData = _data.vacancyRatio_30Days
-                this.thChangeObj.xAxisData = days
                     //最近12个月变化曲线
                 this.mtChangeObj.blueData = _data.useRatio_12Months
                 this.mtChangeObj.redData = _data.vacancyRatio_12Months
-                this.mtChangeObj.xAxisData = month
 
                 //近30天订单信息
                 this.orderDataObjBar = [_data.zeroOrder, _data.payFee, _data.arrearage]
-                this.orderDataObjBar.xAxisData = days
                     //近30天订单信息 --订单数  支付数
                 this.orderDataObj.barData = _data.orderNum_30DaysList
                 this.orderDataObj.lineData = _data.payNum_30DaysList
-                this.orderDataObj.xAxisData = days
 
             }).catch()
         },
@@ -294,6 +237,22 @@ export default {
 
 
             }).catch()
-        }
+        },
+		getStatDateList(){
+			getStatDateList().then(data => {
+				let _data = data.data.data;
+				let days = _data.days
+				let months = _data.months
+				
+				
+				this.thVelocityObj.xAxisData = days
+				this.mtVelocityObj.xAxisData = months
+                this.thChangeObj.xAxisData = days
+                this.mtChangeObj.xAxisData = months
+                this.orderDataObjBar.xAxisData = days
+                this.orderDataObj.xAxisData = days
+				
+			}).catch()
+		}
     }
 }

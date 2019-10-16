@@ -25,3 +25,10 @@ export function queryMapPoint(param) {
 export function queryMapPointData(param) {
     return request.post('api/api/v2/bigScreen/queryMapPointData?pointId=' + param, {})
 }
+
+/** 
+ * 获取统计图横坐标
+ */
+export function getStatDateList() {
+    return request.post('api/api/v2/bigScreen/getStatDateList', {})
+}
