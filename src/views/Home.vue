@@ -74,7 +74,7 @@
                             <div class="home-float left-bottom-item">
                                 <echarts-title title="近十二个月周转率" />
                                 <!-- <charts-title name="最近十二个月周转率" /> -->
-                                <bar-charts :chartsObj="mtVelocityObj" toolTip='最近十二个月周转率' />
+                                <bar-charts :chartsObj="mtVelocityObj" toolTip='近十二个月周转率' />
                             </div>
                         </div>
                     </div>

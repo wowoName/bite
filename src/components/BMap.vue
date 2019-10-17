@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { queryMapPointData } from "@/request/common";
+import { queryMapPointData, queryMapPolygonData } from "@/request/common";
 import echarts from "echarts";
 import "echarts/extension/bmap/bmap";
 
@@ -15,8 +15,6 @@ import "echarts/extension/bmap/bmap";
 //import rizhaoJson from "@/assets/data/donggang.json";
 
 //echarts.registerMap("rizhao", rizhaoJson);
-//东港区边界数据
-import rizhaoBoundary from "@/assets/data/mapData";
 
 //东港区乡镇边界
 import { villagesTowns, coordinates } from "@/assets/data/donggang";
@@ -288,7 +286,7 @@ export default {
             });
         },
         //绘制边界
-        drawBoundary(boundryData, color = "#0e97ff") {
+        drawBoundary(boundryData, color = "#0e97ff", name) {
             let count = boundryData.length;
             for (let i = 0; i < count; i++) {
                 let ply = new BMap.Polygon(boundryData[i], {
@@ -297,14 +295,15 @@ export default {
                     fillColor: color,
                     fillOpacity: 0.6
                 });
-                this.polygonEvent(ply, color)
+                ply.name = name
+                this.polygonEvent(ply, color, name)
                 //建立多边形覆盖物
                 this.curPolygon.push(ply);
                 this.mapModel.addOverlay(ply); //添加覆盖物
                 ply.disableMassClear();
             }
         },
-        polygonEvent(polygon, color) {
+        polygonEvent(polygon, color, name) {
             // let that = this;
             // polygon.addEventListener('click', function (e) {
             //     //停车场弹窗 取消
@@ -321,6 +320,29 @@ export default {
             // })
             polygon.addEventListener('mouseover', function (e) {
                 this.setFillColor('#2656b9')
+            })
+            //区域点击 获取区域数据
+            polygon.addEventListener('click', e => {
+                //这里应该获取数据
+                // queryMapPolygonData(pointId)
+                //     .then(data => {
+                //         let _data = data.data.data;
+                //         parkingLotInfo = {
+                //             parkignName: "",
+                //             berthNum: _data.spaceTotal,
+                //             freeBerth: _data.residueSpaceTotal
+                //         };
+                //         this.showParingLotInfo(point, parkingLotInfo);
+                //     })
+                //     .catch();
+                //点击坐标
+                let point = e.point
+                //显示弹窗信息
+                this.showParingLotInfo(point, {
+                    parkignName: name,
+                    berthNum: 0,
+                    freeBerth: 0
+                });
             })
             polygon.addEventListener('mouseout', function (e) {
                 this.setFillColor(color)
@@ -351,7 +373,7 @@ export default {
         //绘制乡镇边界
         drawVillagesTowns() {
             for (let i = 0; i < villagesTowns.length; i++) {
-                this.drawBoundary(villagesTowns[i].coordinates, villagesTowns[i].color);
+                this.drawBoundary(villagesTowns[i].coordinates, villagesTowns[i].color, villagesTowns[i].name);
             }
 
             this.mapModel.setMinZoom(10);

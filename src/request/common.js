@@ -25,6 +25,14 @@ export function queryMapPoint(param) {
 export function queryMapPointData(param) {
     return request.post('api/api/v2/bigScreen/queryMapPointData?pointId=' + param, {})
 }
+/**
+ *  获取区域数据
+ * @param {*} param 
+ */
+export function queryMapPolygonData(param) {
+    return request.post('api/api/v2/bigScreen/queryMapPointData?pointId=' + param, {})
+}
+
 
 /** 
  * 获取统计图横坐标
