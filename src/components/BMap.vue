@@ -340,8 +340,8 @@ export default {
                 //显示弹窗信息
                 this.showParingLotInfo(point, {
                     parkignName: name,
-                    berthNum: 0,
-                    freeBerth: 0
+                    berthNum: Math.floor(Math.random()*(200 - 400) + 400),
+                    freeBerth: Math.floor(Math.random()*(1 - 200) + 200)
                 });
             })
             polygon.addEventListener('mouseout', function (e) {
