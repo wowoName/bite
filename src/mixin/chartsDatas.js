@@ -178,7 +178,7 @@ export default {
                 this.mtChangeObj.redData = _data.vacancyRatio_12Months
 
                 //近30天订单信息
-                this.orderDataObjBar = [_data.zeroOrder, _data.payFee, _data.arrearage]
+                this.orderDataObjBar = [_data.arrearage, _data.payFee, _data.zeroOrder]
                     //近30天订单信息 --订单数  支付数
                 this.orderDataObj.barData = _data.orderNum_30DaysList
                 this.orderDataObj.lineData = _data.payNum_30DaysList
@@ -186,7 +186,7 @@ export default {
             }).catch()
         },
         queryMapPoint(youdao = true) {
-            queryMapPoint().then(data => {
+            queryMapPoint(this.activeParkingLotType).then(data => {
                 let _data = data.data.data;
                 //停车场基本数据格式
                 // {
@@ -202,7 +202,7 @@ export default {
                     return v.pointType === 'induce'
                 }).map(v => {
                     return {
-                        parkignName: "停车场",
+                        parkignName: "诱导停车场",
                         berthNum: '0',
                         freeBerth: '0',
                         lonlat: [v.posLong, v.posLat],

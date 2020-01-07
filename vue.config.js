@@ -1,11 +1,13 @@
 module.exports = {
     //打包空白
-    publicPath: './',
+    publicPath: process.env.NODE_ENV === "production" ? "/bigScreen/" : "/",
     lintOnSave: true,
     devServer: {
+		//host:'localhost',
+		//port:8080,
         proxy: {
             '/api': {
-                target: 'http://www.topeasypark.com',
+                target: 'http://172.16.99.53:8080/',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

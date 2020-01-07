@@ -336,13 +336,13 @@ export default {
                 //     })
                 //     .catch();
                 //点击坐标
-                let point = e.point
+                // let point = e.point
                 //显示弹窗信息
-                this.showParingLotInfo(point, {
-                    parkignName: name,
-                    berthNum: Math.floor(Math.random()*(200 - 400) + 400),
-                    freeBerth: Math.floor(Math.random()*(1 - 200) + 200)
-                });
+                // this.showParingLotInfo(point, {
+                //     parkignName: name,
+                //     berthNum: Math.floor(Math.random()*(200 - 400) + 400),
+                //     freeBerth: Math.floor(Math.random()*(1 - 200) + 200)
+                // });
             })
             polygon.addEventListener('mouseout', function (e) {
                 this.setFillColor(color)
@@ -389,6 +389,7 @@ export default {
             //清楚聚合
             this.clearMarkerClusterer();
             //停车场坐标 this.mapData.length
+			console.log(this.mapData);
             for (let i = 0; i < 2; i++) {
                 let _type = this.mapData[i].type;
                 let myIcon = new BMap.Icon(
@@ -403,13 +404,14 @@ export default {
                         icon: myIcon,
                         zIndex: 999
                     });
+					console.log("=======" + points[i].pointId)
                     //添加标注点击事件
                     this.parkingLotClick(
                         marker,
                         _point,
                         points[i],
                         _type,
-                        this.mapData[i].pointId
+                        points[i].pointId
                     );
                     this.markersArr.push(marker);
                 }
@@ -435,7 +437,7 @@ export default {
                     .then(data => {
                         let _data = data.data.data;
                         parkingLotInfo = {
-                            parkignName: "",
+                            parkignName: _data.parkName,
                             berthNum: _data.spaceTotal,
                             freeBerth: _data.residueSpaceTotal
                         };

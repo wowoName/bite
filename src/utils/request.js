@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { Message, Loading } from 'element-ui'
 let axiosToken = null
-axios.defaults.timeout = 3000;
+axios.defaults.timeout = 100000;
 axios.defaults.headers = {
     'Content-Type': 'application/json'
 };

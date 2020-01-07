@@ -286,7 +286,7 @@ export default {
         getSystemTime() {
             let now = new Date(),
                 year = now.getFullYear(), //得到年份
-                month = now.getMonth(), //得到月份
+                month = now.getMonth() + 1, //得到月份
                 date = now.getDate(), //得到日期
                 day = now.getDay(), //得到周几
                 hour = now.getHours(), //得到小时
